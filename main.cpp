@@ -4,11 +4,14 @@
 #include <queue>
 #include <unistd.h>
 #include "graph.h"
-#include "pretty_print.h"
 using namespace std;
+
+void showMenu();
+void menuRepl();
 
 int main(int argc, char **argv)
 {
+	/*
 	GRAPH *g = NULL;
 	vector<int> *traversal;
 	vector<int> *min_tree;
@@ -25,7 +28,7 @@ int main(int argc, char **argv)
         cout << "useage: ./graph.out edges.txt cmd.txt\n";
         return -1;
     }
-    
+
     // open the file which contains the edge information
     file.open(argv[1]);
 	if (!file.is_open())
@@ -45,7 +48,7 @@ int main(int argc, char **argv)
 
 	// read in the edges of our graph
 	while (file >> source)
-	{                
+	{
 		file >> destination;
 		file >> weight;
 		g->set_edge(source, destination, weight);
@@ -62,7 +65,7 @@ int main(int argc, char **argv)
 
 	while (file >> cmd)
 	{
-		switch (cmd) 
+		switch (cmd)
 		{
 			case 1:
 				file >> p1;
@@ -107,7 +110,63 @@ int main(int argc, char **argv)
 				cout << "Error: Unknown cmd\n";
 		}
 	}
-	
+
 	file.close();
+	*/
 	return 0;
+}
+
+void showMenu() {
+    cout << "  _ __ ___   ___ _ __  _   _ \n";
+    cout << " | \"_ ` _ \\ / _ \\ \"_ \\| | | |\n";
+    cout << " | | | | | |  __/ | | | |_| |\n";
+    cout << " |_| |_| |_|\\___|_| |_|\\__,_|\n";
+    cout << "========================================================\n";
+    cout << "( 1 )  View Train Schedule\n";
+    cout << "( 2 )  View Station Schedule\n";
+    cout << "( 3 )  Look Up Station ID\n";
+    cout << "( 4 )  Look Up Station Name\n";
+    cout << "( 5 )  Check Service Availability\n";
+    cout << "( 6 )  Check Non-Stop Service Availability\n";
+    cout << "( 7 )  Find Route with Shortest Riding Time\n";
+    cout << "( 8 )  Find Route with Shortest Total Travel Time\n";
+    cout << "( 9 )  Exit\n";
+    cout << "========================================================\n";
+    cout << "Enter option: \n";
+}
+
+
+
+/* TODO how to reset terminal to show menu after height exceeded? */
+void menuRepl() {
+    int option;
+
+    while (option != NULL) {
+        showMenu();
+        cin >> option;
+
+        switch (option) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                exit(0);
+                break;
+            default:
+                cout << "Invalid option, please try again";
+        }
+    }
 }
