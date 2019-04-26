@@ -51,11 +51,28 @@ int main(int argc, char **argv)
 
 	}
 
+	/* TODO CREATE A GRAPH RIGHT HNAH!!! */
+
+
+	/* TODO CREATE A GRAPH RIGHT HNAH!!! */
+
     trainsFile.open(argv[1]);
 	if (!trainsFile.is_open())
 	{
 		cout << "Error: Failed to open input file\n";
 		return 0;
+	}
+
+	// TODO need ADT for weight
+	// maybe change weight to pair. need to
+	// account for this in the graph	
+	int from, to, depart, arrive;
+	while (trainsFile >> from) {
+		trainsFile >> to;
+		trainsFile >> depart;
+		trainsFile >> arrive;
+
+		graph.set_edge(from, to, )
 	}
 	/*
 	GRAPH *g = NULL;
