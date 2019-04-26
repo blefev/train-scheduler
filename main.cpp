@@ -4,18 +4,63 @@
 #include <queue>
 #include <unistd.h>
 #include "graph.h"
+#include <map>
 using namespace std;
 
 void showMenu();
 void menuRepl();
 
+
 int main(int argc, char **argv)
 {
+	ifstream stationsFile;
+	ifstream trainsFile;
+
+    stationsFile.open(argv[1]);
+	if (!stationsFile.is_open())
+	{
+		cout << "Error: Failed to open input file\n";
+		return 0;
+	}
+
+	/*
+	 * TODO 
+	 *
+	 * ok, so trains are not going to be represented by objects
+	 * they are abstractions of the vertices, and will dictate how
+	 * we connect stations
+	 *
+	 * on the other hand it would make sense to abstract nodes
+	 * OR we can simply have a lookup table with station name to id
+	 * ... yeah. vector. only main knows station names. graph object
+	 * only knows station ids
+	 *
+	 * TODO
+	 */
+
+
+	map<int,string> stations;
+	int stationId;
+	string stationName;
+	while (stationsFile >> stationId) {
+		stationsFile >> stationName;
+		stations.insert(pair<int,string>(stationId, stationName));
+		// create graph node for each station id/name
+		// TODO ... should I create objects for trains and stations?
+		// trains would be the vertices, and stations would be the nodes
+
+	}
+
+    trainsFile.open(argv[1]);
+	if (!trainsFile.is_open())
+	{
+		cout << "Error: Failed to open input file\n";
+		return 0;
+	}
 	/*
 	GRAPH *g = NULL;
 	vector<int> *traversal;
 	vector<int> *min_tree;
-	ifstream file;
 	int node_count;
 	int nodes, edges, source, destination, cmd, p1, p2, w;
 	int mode;
@@ -29,13 +74,6 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    // open the file which contains the edge information
-    file.open(argv[1]);
-	if (!file.is_open())
-	{
-		cout << "Error: Failed to open input file\n";
-		return 0;
-	}
 
 	// check if this is a directed graph
 	file >> mode;
@@ -141,7 +179,7 @@ void showMenu() {
 void menuRepl() {
     int option;
 
-    while (option != NULL) {
+    while (option != EOF) {
         showMenu();
         cin >> option;
 
