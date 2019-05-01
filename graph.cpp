@@ -1,41 +1,25 @@
 #include "graph.h"
 //#include "pq.hpp"
 
+typedef pair<int,int> sched;
+
 
 GRAPH::GRAPH(int nodes)
 {
-	this->directed = false;
-
 	this->node_count = nodes;
 
-	this->data = new int*[nodes];
+	this->data = new sched*[nodes];
 	for (int i = 0; i <= nodes; i++) {
-		this->data[i] = new int[nodes];
+		this->data[i] = new sched[nodes];
 		for (int j = 0; j <= nodes; j++) {
-			this->data[i][j] = 0;
+			this->data[i][j] = null;
 		}
 	}
 }
 
-GRAPH::GRAPH(bool is_directed, int nodes)
+void GRAPH::set_edge(int source, int destination, sched schedule)
 {
-	this->directed = is_directed;
-	this->node_count = nodes;
-
-	this->data = new int*[nodes];
-	for (int i = 0; i <= nodes; i++) {
-		this->data[i] = new int[nodes];
-		for (int j = 0; j <= nodes; j++) {
-			this->data[i][j] = 0;
-		}
-	}
-}
-void GRAPH::set_edge(int source, int destination, int w)
-{
-	if (!this->directed) {
-		this->data[source][destination] = w;
-	}
-	this->data[source][destination] = w;
+	this->data[source][destination] = sched;
 }
 
 void GRAPH::print_data()
@@ -159,9 +143,4 @@ int GRAPH::dijkstra(int src, int dst)
 		}
 	}
 	return distances[dst];
-}
-
-vector<int> *GRAPH::primm(int src)
-{
-
 }

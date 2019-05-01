@@ -53,6 +53,7 @@ int main(int argc, char **argv)
 
 	/* TODO CREATE A GRAPH RIGHT HNAH!!! */
 
+	GRAPH* graph = new GRAPH(stations.size());
 
 	/* TODO CREATE A GRAPH RIGHT HNAH!!! */
 
@@ -72,7 +73,7 @@ int main(int argc, char **argv)
 		trainsFile >> depart;
 		trainsFile >> arrive;
 
-		graph.set_edge(from, to, )
+		graph->set_edge(from, to,  pair<int,int>(depart, arrive));
 	}
 	/*
 	GRAPH *g = NULL;
