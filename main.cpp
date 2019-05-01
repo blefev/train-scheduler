@@ -10,6 +10,7 @@ using namespace std;
 void show_menu();
 void menu_repl(GRAPH* graph, map<int, string> &stations);
 void print_schedules(GRAPH* graph, map<int, string> &stations);
+void print_schedule(GRAPH* graph, map<int, string> &stations, int station_id); 
 
 
 int main(int argc, char **argv)
@@ -244,18 +245,24 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 void print_schedules(GRAPH* graph, map<int, string> &stations) {
 	for (map<int,string>::iterator it=stations.begin(); it!=stations.end(); ++it){
 		int station_id = it->first;
-		string station_name = it->second;
 
-		cout << " ------------------------- \n";
-		cout << "  Schedule for " << station_name << "|\n";
-		cout << " ------------------------- \n";
+		print_schedule(graph, stations, station_id);
+	}
+}
+
+void print_schedule(GRAPH* graph, map<int, string> &stations, int station_id) {
+		string station_name = stations.at(station_id);
+
+		cout << "------------------------- \n";
+		cout << " " << station_name << "\n";
+		cout << "------------------------- \n";
 
 		//get schedule for station
 		vector<vector<int> > schedule = graph->get_schedule(station_id);
 
 		// print schedules
 		for (vector<vector<int> >::iterator it=schedule.begin(); it!=schedule.end(); ++it){
-			cout << stations.at(it->front()) << ": " << it->at(1) << " - " << it->at(2) << "\n";
+			cout << "  " << stations.at(it->front()) << ": " << it->at(1) << " - " << it->at(2) << "\n";
 		}
-	}
+		cout << "\n";
 }
