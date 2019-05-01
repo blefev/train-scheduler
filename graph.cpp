@@ -145,3 +145,14 @@ int GRAPH::dijkstra(int src, int dst)
 	}
 	return distances[dst];
 }
+
+vector<sched*>* GRAPH::get_schedule(int stationId) {
+	vector<sched*>* trains = new vector<sched*>;
+	// iterate through data[stationId] 
+	for (int i=0; i < this->node_count; i++) {
+		if (this->data[stationId][i] != NULL) {
+			trains->push_back(this->data[stationId][i]);	
+		}
+	}
+	return trains;
+}

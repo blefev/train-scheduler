@@ -24,6 +24,8 @@ public:
 	void set_edge(int src, int dst, pair<int,int> schedule);
 	// Print the graph's data
 	void print_data(void);
+	// find station schedule by id
+	vector<sched*>* get_schedule(int stationId);
 	bool empty(vector<bool>);
 	// Perform a dfs from the provided start node. Returns a vector containing
 	// the search results

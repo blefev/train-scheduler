@@ -8,7 +8,7 @@
 using namespace std;
 
 void showMenu();
-void menuRepl();
+void menuRepl(GRAPH* graph, map<int, string> &stations);
 
 
 int main(int argc, char **argv)
@@ -67,6 +67,8 @@ int main(int argc, char **argv)
 	// TODO need ADT for weight
 	// maybe change weight to pair. need to
 	// account for this in the graph
+
+
 	int from, to, depart, arrive;
 	while (trainsFile >> from) {
 		trainsFile >> to;
@@ -76,6 +78,10 @@ int main(int argc, char **argv)
 		graph->set_edge(from, to,  pair<int,int>(depart, arrive));
 		cout << "Set edge for " << stations.at(from) << " to " << stations.at(to) << endl;
 	}
+
+	// now that we have the pieces set up, we can start the menu repl
+	menuRepl(graph, stations);
+
 	/*
 	GRAPH *g = NULL;
 	vector<int> *traversal;
@@ -189,13 +195,13 @@ void showMenu() {
     cout << "( 8 )  Find Route with Shortest Total Travel Time\n";
     cout << "( 9 )  Exit\n";
     cout << "========================================================\n";
-    cout << "Enter option: \n";
+    cout << "Enter option:  ";
 }
 
 
 
 /* TODO how to reset terminal to show menu after height exceeded? */
-void menuRepl() {
+void menuRepl(GRAPH* graph, map<int, string> &stations) {
     int option;
 
     while (option != EOF) {
@@ -203,7 +209,10 @@ void menuRepl() {
         cin >> option;
 
         switch (option) {
-            case 1:
+            case 1: //view train schedule.
+					// iterate through all stations and show schedule
+				vector<sched> *traversal;
+
                 break;
             case 2:
                 break;
