@@ -220,6 +220,10 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 
                 break;
             case 2:
+				cout << "Please enter the station ID: ";
+				int station_id;
+				cin >> station_id;
+				print_schedule(graph, stations, station_id);
                 break;
             case 3:
                 break;
