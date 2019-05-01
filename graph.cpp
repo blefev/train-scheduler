@@ -24,109 +24,95 @@ void GRAPH::set_edge(int source, int destination, sched* schedule)
 
 bool GRAPH::service_available(int source, int destination)
 {
-	return this->data[source][destination] != NULL;
-	/*
-	std::cout<<"    ";
+    vector<int> s_path = path(source, destination, false);
 
-	for (int i=1; i <= this->node_count; i++) {
-		std::cout << setw(3)<<i;
-	}
-	std::cout << std::endl;
-
-	for (int i=1; i <= this->node_count; i++) {
-		std::cout<<i<<" |";
-		for (int j=1; j <= this->node_count; j++) {
-			std::cout<<setw(3)<<this->data[i][j]->first << ", " << this->data[i][j]->second;
-		}
-		cout << std::endl;
-	}
-	*/
+    return !s_path.empty();
 }
 
 vector<int> *GRAPH::dfs(int start)
 {
-	vector<int> *traversal = new vector<int>();
-	std::set<int> discovered;
+    vector<int> *traversal = new vector<int>();
+    std::set<int> discovered;
 
-	std::stack<int> st;
-	st.push(start);
+    std::stack<int> st;
+    st.push(start);
 
-	while (!st.empty()) {
-	int cur = st.top();
-	st.pop();
-	if (discovered.count(cur) == 0) {
-		traversal->push_back(cur);
-		discovered.insert(cur);
-		for (int i=1; i <= this->node_count; i++) {
-			if ((this->data[cur][i]->first - this->data[cur][i]->second) > 0) {
-				st.push(i);
-			}
-		}
-	}
-	}
+    while (!st.empty()) {
+        int cur = st.top();
+        st.pop();
+        if (discovered.count(cur) == 0) {
+            traversal->push_back(cur);
+            discovered.insert(cur);
+            for (int i=1; i <= this->node_count; i++) {
+                if (this->data[cur][i] != NULL) {
+                    st.push(i);
+                }
+            }
+        }
+    }
 
-	return traversal;
+    return traversal;
 }
 
 vector<int> *GRAPH::bfs(int start)
 {
-	vector<int> *traversal = new vector<int>();
+    vector<int> *traversal = new vector<int>();
 
-	std::queue<int> frontier;
-	std::set<int> discovered;
+    std::queue<int> frontier;
+    std::set<int> discovered;
 
-	frontier.push(start);
-	discovered.insert(start);
+    frontier.push(start);
+    discovered.insert(start);
 
-	while(!frontier.empty()) {
-		int cur = frontier.front();
-		frontier.pop();
-		traversal->push_back(cur);
+    while(!frontier.empty()) {
+        int cur = frontier.front();
+        frontier.pop();
+        traversal->push_back(cur);
 
-		for (int i=1; i <= this->node_count; i++) {
-			if ((this->data[cur][i]->first - this->data[cur][i]->second) > 0) {
+        for (int i=1; i <= this->node_count; i++) {
+            if (this->data[cur][i] != NULL) {
 
-				std::cout<<"Found adjv " << i << std::endl;
+                std::cout<<"Found adjv " << i << std::endl;
 
-				if (discovered.count(i) == 0) {
-					frontier.push(i);
-					discovered.insert(i);
-				}
-			}
-		}
-	}
+                if (discovered.count(i) == 0) {
+                    frontier.push(i);
+                    discovered.insert(i);
+                }
+            }
+        }
+    }
 
-	return traversal;
+    return traversal;
 }
 
 bool GRAPH::empty(vector<bool> set) {
-	for (int i =1; i < set.size(); i++) {
-		if (set[i] == false) {
-			return false;
-		}
-	}
-	return true;
+    for (int i =1; i < set.size(); i++) {
+        if (set[i] == false) {
+            return false;
+        }
+    }
+    return true;
 }
 
 // layovers false -> don't count layovers
 // layovers true  -> do count layovers
 vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
-   //  TODO TODO TODO TODO TODO TODO TODO
-   //   YOU CANNOT GO BACKWARDS IN TIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-   //   YOU CANNOT GO BACKWARDS IN TIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-   //   YOU CANNOT GO BACKWARDS IN TIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-   //   Remember to implement layover times!!!!!!
-   //
+    //  TODO TODO TODO TODO TODO TODO TODO
+    //   YOU CANNOT GO BACKWARDS IN TIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //   YOU CANNOT GO BACKWARDS IN TIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //   YOU CANNOT GO BACKWARDS IN TIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //   Remember to implement layover times!!!!!!
+    //
     vector<int> shortest_path; 
-	vector<bool> vertex_set;
-	int predecessors[this->node_count];
-	int distances[this->node_count];
+    vector<bool> vertex_set;
+    int predecessors[this->node_count];
+    int distances[this->node_count];
 
     // create list of all possible vertexes
-	for (int i=1; i <= this->node_count; i++) {
-		distances[i] = INT_MAX;
+    for (int i=1; i <= this->node_count; i++) {
+        distances[i] = INT_MAX;
         predecessors[i] = 0;
-	}
+    }
 
     // set starting node distance 
     // this also ensures we "visit" src first
