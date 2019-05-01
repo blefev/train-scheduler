@@ -12,7 +12,7 @@
 #include <set>
 #include <vector>
 
-typedef std::pair<int,int> sched;
+typedef std::vector<int> sched;
 
 using namespace std;
 

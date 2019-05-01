@@ -115,7 +115,7 @@ vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
     }
 
     // set starting node distance 
-    // this also ensures we "visit" src first
+    // this also ensures we "visit" src at(0)
     distances[src] = 0;
 
     int cur = src;
@@ -132,9 +132,9 @@ vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
                     // weight
                     sched* s = this->data[currentV][adjV];
 
-                    //cout << "first:second " << s->first << " : "<< s->second << "\n";
+                    //cout << "at(0):at(1) " << s->at(0) << " : "<< s->at(1) << "\n";
                     // time in minutes trip takes, aka weight
-                    int weight = t_diff(s->first, s->second);
+                    int weight = t_diff(s->at(0), s->at(1));
                     //cout << "weight for " << currentV <<" to "<<adjV << ": "<<weight<<"\n";
                     int alt_dist;
 
@@ -226,10 +226,10 @@ int GRAPH::dijkstra(int src, int dst)
 
 
         for (int vert=1; vert <= this->node_count; vert++) {
-            if (vertex_set[vert] == false && this->data[minNode][vert]->first > 0) {
+            if (vertex_set[vert] == false && this->data[minNode][vert]->at(0) > 0) {
                 if (distances[minNode] != INT_MAX && distances[minNode] 
-                        + (this->data[minNode][vert]->first - this->data[minNode][vert]->second) < distances[vert]) {
-                    distances[vert] = distances[minNode] + (this->data[minNode][vert]->first - this->data[minNode][vert]->second);
+                        + (this->data[minNode][vert]->at(0) - this->data[minNode][vert]->at(1)) < distances[vert]) {
+                    distances[vert] = distances[minNode] + (this->data[minNode][vert]->at(0) - this->data[minNode][vert]->at(1));
                 }
             }
         }
@@ -250,8 +250,8 @@ vector<vector<int> > GRAPH::get_schedule(int station_id) {
             vector<int> train;
 
             train.push_back(i);
-            train.push_back(this->data[station_id][i]->first);
-            train.push_back(this->data[station_id][i]->second);
+            train.push_back(this->data[station_id][i]->at(0));
+            train.push_back(this->data[station_id][i]->at(1));
 
             trains.push_back(train);
         }
