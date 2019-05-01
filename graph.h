@@ -1,6 +1,7 @@
-#ifndef GRAPH_H
+ #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <map>
 #include <utility>
 #include <cstddef>
 #include <climits>
@@ -39,6 +40,9 @@ public:
 	// a destination node. Returns the minimum distance between the two or
 	// -1 if a path does not exist
 	int dijkstra(int, int);
+	vector<int> path(int, int, bool);
+
+    int t_diff (int a, int b);
 
 private:
 	// keep track of the number of nodes in the graph

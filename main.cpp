@@ -77,8 +77,10 @@ int main(int argc, char **argv)
 		trainsFile >> depart;
 		trainsFile >> arrive;
 
+        cout << "f:t:d:a -> "<<from<<":"<<to<<":"<<depart<<":"<<arrive<<"\n";
 		sched* schedule = new sched(depart, arrive);
 		graph->set_edge(from, to,  schedule);
+        cout << "Service available? : " << graph->service_available(from, to) << "\n";
 		cout << "Set edge for " << stations.at(from) << " to " << stations.at(to) << endl;
 	}
 
@@ -209,6 +211,7 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 	int station_id_a;
 	string station_name;
 	bool found = false;
+    vector<int> path;
 
 	show_menu();
     while (option != '9') {
@@ -256,6 +259,7 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				break;
 
 			case '5':
+                // TODO TODO TODO this needs to do a SEARCH!!!
 				cout << "Enter departure station ID: ";
 				cin >> station_id;
 
@@ -270,10 +274,26 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 
 				break;
 			case '6':
+                // non stop service
 				break;
 			case '7':
+                // shortest riding time
+				cout << "Enter departure station ID: ";
+				cin >> station_id;
+				cout << "Enter destination station ID: ";
+				cin >> station_id_a;
+
+                path = graph->path(station_id, station_id_a, false);
+
+                cout << "Shortest path : \n";
+                for (auto it = path.begin(); it != path.end(); it++) {
+                    cout << *it << " " << endl;
+                }
+                cout << "\n";
+
 				break;
 			case '8':
+                // shortest total time
 				break;
 			case '9':
 				exit(0);
@@ -296,7 +316,7 @@ void print_schedule(GRAPH* graph, map<int, string> &stations, int station_id) {
 	string station_name = stations.at(station_id);
 
 	cout << "------------------------- \n";
-	cout << " " << station_name << "\n";
+	cout << " " << station_name << " (" << station_id << ")\n";
 	cout << "------------------------- \n";
 
 	//get schedule for station

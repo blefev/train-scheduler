@@ -28,12 +28,12 @@ bool GRAPH::service_available(int source, int destination)
 	/*
 	std::cout<<"    ";
 
-	for (int i=0; i <= this->node_count; i++) {
+	for (int i=1; i <= this->node_count; i++) {
 		std::cout << setw(3)<<i;
 	}
 	std::cout << std::endl;
 
-	for (int i=0; i <= this->node_count; i++) {
+	for (int i=1; i <= this->node_count; i++) {
 		std::cout<<i<<" |";
 		for (int j=1; j <= this->node_count; j++) {
 			std::cout<<setw(3)<<this->data[i][j]->first << ", " << this->data[i][j]->second;
@@ -57,7 +57,7 @@ vector<int> *GRAPH::dfs(int start)
 	if (discovered.count(cur) == 0) {
 		traversal->push_back(cur);
 		discovered.insert(cur);
-		for (int i=0; i <= this->node_count; i++) {
+		for (int i=1; i <= this->node_count; i++) {
 			if ((this->data[cur][i]->first - this->data[cur][i]->second) > 0) {
 				st.push(i);
 			}
@@ -83,10 +83,11 @@ vector<int> *GRAPH::bfs(int start)
 		frontier.pop();
 		traversal->push_back(cur);
 
-		for (int i=0; i <= this->node_count; i++) {
+		for (int i=1; i <= this->node_count; i++) {
 			if ((this->data[cur][i]->first - this->data[cur][i]->second) > 0) {
 
 				std::cout<<"Found adjv " << i << std::endl;
+
 				if (discovered.count(i) == 0) {
 					frontier.push(i);
 					discovered.insert(i);
@@ -99,7 +100,7 @@ vector<int> *GRAPH::bfs(int start)
 }
 
 bool GRAPH::empty(vector<bool> set) {
-	for (int i =0; i < set.size(); i++) {
+	for (int i =1; i < set.size(); i++) {
 		if (set[i] == false) {
 			return false;
 		}
@@ -107,64 +108,167 @@ bool GRAPH::empty(vector<bool> set) {
 	return true;
 }
 
+// layovers false -> don't count layovers
+// layovers true  -> do count layovers
+vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
+   //  TODO TODO TODO TODO TODO TODO TODO
+   //   YOU CANNOT GO BACKWARDS IN TIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   //   YOU CANNOT GO BACKWARDS IN TIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   //   YOU CANNOT GO BACKWARDS IN TIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   //   Remember to implement layover times!!!!!!
+   //
+    vector<int> shortest_path; 
+	vector<bool> vertex_set;
+	int predecessors[this->node_count];
+	int distances[this->node_count];
+
+    // create list of all possible vertexes
+	for (int i=1; i <= this->node_count; i++) {
+		distances[i] = INT_MAX;
+        predecessors[i] = 0;
+	}
+
+    // set starting node distance 
+    // this also ensures we "visit" src first
+    distances[src] = 0;
+
+    int cur = src;
+
+    // for every vertex in graph
+    for (int i=1; i <= this->node_count; i++) {
+
+        for (int currentV=1; currentV <= this->node_count; currentV++) {
+
+            // visit each vertex adjacent to current
+            for (int adjV=1; adjV <= this->node_count; adjV++) {
+                // for each vertex adjV to currentV
+                if (this->data[currentV][adjV] != NULL) {
+                    // weight
+                    sched* s = this->data[currentV][adjV];
+
+                    //cout << "first:second " << s->first << " : "<< s->second << "\n";
+                    // time in minutes trip takes, aka weight
+                    int weight = t_diff(s->first, s->second);
+                    //cout << "weight for " << currentV <<" to "<<adjV << ": "<<weight<<"\n";
+                    int alt_dist;
+
+                    if (layovers) {
+                        // add time diff between 
+                        // predecessor arrival time 
+                        // from this->data[predecessor[currentV]][currentV]
+                        // and next node leave time??
+                    } else {
+                        alt_dist = distances[currentV] + weight;
+                        //cout << "distance to " << currentV << " from src: " << alt_dist << "\n";
+
+                        if (alt_dist < distances[adjV]) {
+                            distances[adjV] = alt_dist;
+                            predecessors[adjV] = currentV;
+                        }
+                    }
+                }
+
+            }
+
+
+        }
+
+    }
+    // to recreate shortest_path, go backwards
+    // following predecessors
+    // may also need to add scheds to this
+    int tmp = dst;
+    if (predecessors[tmp] > 0) {
+        shortest_path.push_back(dst);
+        while (tmp != src) {
+            int pre = predecessors[tmp];
+            shortest_path.insert(shortest_path.begin(), pre);
+            tmp = pre; 
+        }
+    }
+
+    return shortest_path;
+}
+
+int GRAPH::t_diff(int a, int b) {
+    // calculate difference in time 
+    int h1 = a / 100;
+    int m1 = a % 100;
+    int h2 = b / 100;
+    int m2 = b % 100;
+
+    if (m1 > m2) {
+        h2--;
+        m2 += 60;
+    }
+
+    int diff_m = m2 - m1;
+    int diff_h = h2 - h1;
+
+    int minutes = diff_h * 60 + diff_m;
+    return minutes;
+}
+
 int GRAPH::dijkstra(int src, int dst)
 {
-	std::vector<bool> vertexSet;
-	int distances[this->node_count];
-	int minNode;
-	int minDistance;
+    std::vector<bool> vertex_set;
+    int distances[this->node_count];
+    int minNode;
+    int minDistance;
 
-	for (int i=0; i < this->node_count; i++) {
-		distances[i] = INT_MAX;
-		vertexSet.push_back(false);
-	}
+    for (int i=1; i <= this->node_count; i++) {
+        distances[i] = INT_MAX;
+        vertex_set.push_back(false);
+    }
 
-	distances[src] = 0;
+    distances[src] = 0;
 
-	while (!empty(vertexSet)) {
-		minNode = INT_MAX;
-		minDistance = INT_MAX;
+    while (!empty(vertex_set)) {
+        minNode = INT_MAX;
+        minDistance = INT_MAX;
 
-		for (int vert=0; vert < this->node_count; vert++) {
-			if (vertexSet[vert] == false && distances[vert] <= minDistance) {
-				minDistance = distances[vert];
-				minNode = vert;
-			}
-		}
+        for (int vert=1; vert <= this->node_count; vert++) {
+            if (vertex_set[vert] == false && distances[vert] <= minDistance) {
+                minDistance = distances[vert];
+                minNode = vert;
+            }
+        }
 
-		std::cout << "minNode: " << minNode << endl;
+        std::cout << "minNode: " << minNode << endl;
 
-		vertexSet[minNode] = true;
+        vertex_set[minNode] = true;
 
 
-		for (int vert=0; vert < this->node_count; vert++) {
-			if (vertexSet[vert] == false && this->data[minNode][vert]->first > 0) {
-				if (distances[minNode] != INT_MAX && distances[minNode] 
-						+ (this->data[minNode][vert]->first - this->data[minNode][vert]->second) < distances[vert]) {
-					distances[vert] = distances[minNode] + (this->data[minNode][vert]->first - this->data[minNode][vert]->second);
-				}
-			}
-		}
-	}
-	return distances[dst];
+        for (int vert=1; vert <= this->node_count; vert++) {
+            if (vertex_set[vert] == false && this->data[minNode][vert]->first > 0) {
+                if (distances[minNode] != INT_MAX && distances[minNode] 
+                        + (this->data[minNode][vert]->first - this->data[minNode][vert]->second) < distances[vert]) {
+                    distances[vert] = distances[minNode] + (this->data[minNode][vert]->first - this->data[minNode][vert]->second);
+                }
+            }
+        }
+    }
+    return distances[dst];
 }
 
 vector<vector<int> > GRAPH::get_schedule(int station_id) {
 
-	vector<vector<int> > trains;
-	// iterate through data[station_id] 
-	for (int i=0; i < this->node_count; i++) {
-		if (this->data[station_id][i] != NULL) {
 
-			sched* schedule = this->data[station_id][i];
-			vector<int> train;
+    vector<vector<int> > trains;
+    // iterate through data[station_id] 
+    for (int i=1; i <= this->node_count; i++) {
+        if (this->data[station_id][i] != NULL) {
 
-			train.push_back(i);
-			train.push_back(this->data[station_id][i]->first);
-			train.push_back(this->data[station_id][i]->second);
 
-			trains.push_back(train);
-		}
-	}
-	return trains;
+            sched* schedule = this->data[station_id][i];
+            vector<int> train;
+
+            train.push_back(i);
+            train.push_back(this->data[station_id][i]->first);
+            train.push_back(this->data[station_id][i]->second);
+
+            trains.push_back(train);
+        }
+    }
+    return trains;
 }
