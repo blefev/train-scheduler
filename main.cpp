@@ -8,7 +8,8 @@
 using namespace std;
 
 void showMenu();
-void menuRepl(GRAPH* graph, map<int, string> &stations);
+void menu_repl(GRAPH* graph, map<int, string> &stations);
+void print_schedules(GRAPH* graph, map<int, string> &stations);
 
 
 int main(int argc, char **argv)
@@ -40,11 +41,11 @@ int main(int argc, char **argv)
 
 
 	map<int,string> stations;
-	int stationId;
+	int station_id;
 	string stationName;
-	while (stationsFile >> stationId) {
+	while (stationsFile >> station_id) {
 		stationsFile >> stationName;
-		stations.insert(pair<int,string>(stationId, stationName));
+		stations.insert(pair<int,string>(station_id, stationName));
 		// create graph node for each station id/name
 		// TODO ... should I create objects for trains and stations?
 		// trains would be the vertices, and stations would be the nodes
@@ -80,7 +81,7 @@ int main(int argc, char **argv)
 	}
 
 	// now that we have the pieces set up, we can start the menu repl
-	menuRepl(graph, stations);
+	menu_repl(graph, stations);
 
 	/*
 	GRAPH *g = NULL;
@@ -201,7 +202,7 @@ void showMenu() {
 
 
 /* TODO how to reset terminal to show menu after height exceeded? */
-void menuRepl(GRAPH* graph, map<int, string> &stations) {
+void menu_repl(GRAPH* graph, map<int, string> &stations) {
     int option;
 
     while (option != EOF) {
@@ -212,6 +213,7 @@ void menuRepl(GRAPH* graph, map<int, string> &stations) {
             case 1: //view train schedule.
 					// iterate through all stations and show schedule
 				vector<sched> *traversal;
+				print_schedules(graph, stations);
 
                 break;
             case 2:
@@ -235,4 +237,18 @@ void menuRepl(GRAPH* graph, map<int, string> &stations) {
                 cout << "Invalid option, please try again";
         }
     }
+}
+
+void print_schedules(GRAPH* graph, map<int, string> &stations) {
+	for (map<int,string>::iterator it=stations.begin(); it!=stations.end(); ++it){
+		int station_id = it->first;
+		string station_name = it->second;
+		//get schedule for station
+		vector<sched*>* schedule = graph->get_schedule(station_id);
+
+		// print schedules
+		for (vector<sched*>::iterator it=schedule->begin(); it!=schedule->end(); ++it){
+			vector<sched*>* schedule = graph->get_schedule(station_id);
+		}
+	}
 }
