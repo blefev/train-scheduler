@@ -11,7 +11,8 @@ GRAPH::GRAPH(int nodes)
 	for (int i = 0; i <= nodes; i++) {
 		this->data[i] = new sched[nodes];
 		for (int j = 0; j <= nodes; j++) {
-			//this->data[i][j] = NULL;
+			this->data[i][j].first = 0;
+			this->data[i][j].second = 0;
 		}
 	}
 }

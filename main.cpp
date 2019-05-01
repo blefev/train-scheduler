@@ -16,10 +16,10 @@ int main(int argc, char **argv)
 	ifstream stationsFile;
 	ifstream trainsFile;
 
-    stationsFile.open(argv[1]);
+    stationsFile.open("stations.dat");
 	if (!stationsFile.is_open())
 	{
-		cout << "Error: Failed to open input file\n";
+		cout << "Error: Failed to open stations.dat\n";
 		return 0;
 	}
 
@@ -57,10 +57,10 @@ int main(int argc, char **argv)
 
 	/* TODO CREATE A GRAPH RIGHT HNAH!!! */
 
-    trainsFile.open(argv[1]);
+    trainsFile.open("trains.dat");
 	if (!trainsFile.is_open())
 	{
-		cout << "Error: Failed to open input file\n";
+		cout << "Error: Failed to open trains.dat\n";
 		return 0;
 	}
 
