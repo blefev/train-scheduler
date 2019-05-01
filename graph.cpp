@@ -124,6 +124,15 @@ vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
                     // weight
                     sched s = this->data[currentV][adjV];
 
+                    if (predecessors[currentV] > 0) {
+                        //check times are valid
+                        int p = predecessors[currentV];
+                        if (this->data[p][currentV].at(1) > this->data[currentV][adjV].at(0)) {
+                            continue;
+                            predecessors[adjV] = 0;
+                        }
+                    }
+
                     //cout << "at(0):at(1) " << s.at(0) << " : "<< s.at(1) << "\n";
                     // time in minutes trip takes, aka weight
                     int weight = t_diff(s.at(0), s.at(1));
