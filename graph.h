@@ -22,7 +22,7 @@ public:
 	// Constructor to use when we have an initial number of nodes & edges
 	GRAPH(int nodes);
 	// Set the edge going from src to dst
-	void set_edge(int src, int dst, sched* schedule);
+	void set_edge(int src, int dst, sched schedule);
 	// Print the graph's data
 	bool service_available(int source, int destination);
 
@@ -48,6 +48,6 @@ private:
 	// keep track of the number of nodes in the graph
 	int node_count;
 	// this represents the adjacency matrix
-	sched ***data;
+    sched data[119][119];
 };
 #endif

@@ -78,9 +78,9 @@ int main(int argc, char **argv)
 		trainsFile >> arrive;
 
         cout << "f:t:d:a -> "<<from<<":"<<to<<":"<<depart<<":"<<arrive<<"\n";
-		sched* schedule = new sched;
-        schedule->push_back(depart);
-        schedule->push_back(arrive);
+		sched schedule;
+        schedule.push_back(depart);
+        schedule.push_back(arrive);
 		graph->set_edge(from, to,  schedule);
         cout << "Service available? : " << graph->service_available(from, to) << "\n";
 		cout << "Set edge for " << stations.at(from) << " to " << stations.at(to) << endl;

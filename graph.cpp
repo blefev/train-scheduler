@@ -6,17 +6,9 @@
 GRAPH::GRAPH(int nodes)
 {
 	this->node_count = nodes;
-
-	this->data = new sched**[nodes];
-	for (int i = 0; i <= nodes; i++) {
-		this->data[i] = new sched*[nodes];
-		for (int j = 0; j <= nodes; j++) {
-			this->data[i][j] = NULL;
-		}
-	}
 }
 
-void GRAPH::set_edge(int source, int destination, sched* schedule)
+void GRAPH::set_edge(int source, int destination, sched schedule)
 {
 
 	this->data[source][destination] = schedule;
@@ -44,7 +36,7 @@ vector<int> *GRAPH::dfs(int start)
             traversal->push_back(cur);
             discovered.insert(cur);
             for (int i=1; i <= this->node_count; i++) {
-                if (this->data[cur][i] != NULL) {
+                if (!this->data[cur][i].empty()) {
                     st.push(i);
                 }
             }
@@ -70,7 +62,7 @@ vector<int> *GRAPH::bfs(int start)
         traversal->push_back(cur);
 
         for (int i=1; i <= this->node_count; i++) {
-            if (this->data[cur][i] != NULL) {
+            if (!this->data[cur][i].empty()) {
 
                 std::cout<<"Found adjv " << i << std::endl;
 
@@ -128,13 +120,13 @@ vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
             // visit each vertex adjacent to current
             for (int adjV=1; adjV <= this->node_count; adjV++) {
                 // for each vertex adjV to currentV
-                if (this->data[currentV][adjV] != NULL) {
+                if (!this->data[currentV][adjV].empty()) {
                     // weight
-                    sched* s = this->data[currentV][adjV];
+                    sched s = this->data[currentV][adjV];
 
-                    //cout << "at(0):at(1) " << s->at(0) << " : "<< s->at(1) << "\n";
+                    //cout << "at(0):at(1) " << s.at(0) << " : "<< s.at(1) << "\n";
                     // time in minutes trip takes, aka weight
-                    int weight = t_diff(s->at(0), s->at(1));
+                    int weight = t_diff(s.at(0), s.at(1));
                     //cout << "weight for " << currentV <<" to "<<adjV << ": "<<weight<<"\n";
                     int alt_dist;
 
@@ -226,10 +218,10 @@ int GRAPH::dijkstra(int src, int dst)
 
 
         for (int vert=1; vert <= this->node_count; vert++) {
-            if (vertex_set[vert] == false && this->data[minNode][vert]->at(0) > 0) {
+            if (vertex_set[vert] == false && this->data[minNode][vert].at(0) > 0) {
                 if (distances[minNode] != INT_MAX && distances[minNode] 
-                        + (this->data[minNode][vert]->at(0) - this->data[minNode][vert]->at(1)) < distances[vert]) {
-                    distances[vert] = distances[minNode] + (this->data[minNode][vert]->at(0) - this->data[minNode][vert]->at(1));
+                        + (this->data[minNode][vert].at(0) - this->data[minNode][vert].at(1)) < distances[vert]) {
+                    distances[vert] = distances[minNode] + (this->data[minNode][vert].at(0) - this->data[minNode][vert].at(1));
                 }
             }
         }
@@ -243,15 +235,15 @@ vector<vector<int> > GRAPH::get_schedule(int station_id) {
     vector<vector<int> > trains;
     // iterate through data[station_id] 
     for (int i=1; i <= this->node_count; i++) {
-        if (this->data[station_id][i] != NULL) {
+        if (!this->data[station_id][i].empty()) {
 
 
-            sched* schedule = this->data[station_id][i];
+            sched schedule = this->data[station_id][i];
             vector<int> train;
 
             train.push_back(i);
-            train.push_back(this->data[station_id][i]->at(0));
-            train.push_back(this->data[station_id][i]->at(1));
+            train.push_back(this->data[station_id][i].at(0));
+            train.push_back(this->data[station_id][i].at(1));
 
             trains.push_back(train);
         }
