@@ -16,14 +16,16 @@ GRAPH::GRAPH(int nodes)
 	}
 }
 
-void GRAPH::set_edge(int source, int destination, sched schedule)
+void GRAPH::set_edge(int source, int destination, sched* schedule)
 {
 
-	this->data[source][destination] = &schedule;
+	this->data[source][destination] = schedule;
 }
 
-void GRAPH::print_data()
+void GRAPH::print_data(int source, int destination)
 {
+	cout << "Edges in get_schedule: " << this->data[source][destination]->first << " : " << this->data[source][destination]->second << "\n";
+	/*
 	std::cout<<"    ";
 
 	for (int i=0; i <= this->node_count; i++) {
@@ -38,6 +40,7 @@ void GRAPH::print_data()
 		}
 		cout << std::endl;
 	}
+	*/
 }
 
 vector<int> *GRAPH::dfs(int start)
@@ -146,12 +149,21 @@ int GRAPH::dijkstra(int src, int dst)
 	return distances[dst];
 }
 
-vector<sched*>* GRAPH::get_schedule(int stationId) {
-	vector<sched*>* trains = new vector<sched*>;
-	// iterate through data[stationId] 
+vector<vector<int> > GRAPH::get_schedule(int station_id) {
+
+	vector<vector<int> > trains;
+	// iterate through data[station_id] 
 	for (int i=0; i < this->node_count; i++) {
-		if (this->data[stationId][i] != NULL) {
-			trains->push_back(this->data[stationId][i]);	
+		if (this->data[station_id][i] != NULL) {
+
+			sched* schedule = this->data[station_id][i];
+			vector<int> train;
+
+			train.push_back(i);
+			train.push_back(this->data[station_id][i]->first);
+			train.push_back(this->data[station_id][i]->second);
+
+			trains.push_back(train);
 		}
 	}
 	return trains;

@@ -21,11 +21,13 @@ public:
 	// Constructor to use when we have an initial number of nodes & edges
 	GRAPH(int nodes);
 	// Set the edge going from src to dst
-	void set_edge(int src, int dst, pair<int,int> schedule);
+	void set_edge(int src, int dst, sched* schedule);
 	// Print the graph's data
-	void print_data(void);
+	void print_data(int source, int destination);
+
 	// find station schedule by id
-	vector<sched*>* get_schedule(int stationId);
+	vector<vector<int> > get_schedule(int stationId);
+
 	bool empty(vector<bool>);
 	// Perform a dfs from the provided start node. Returns a vector containing
 	// the search results

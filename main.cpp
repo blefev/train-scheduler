@@ -7,7 +7,7 @@
 #include <map>
 using namespace std;
 
-void showMenu();
+void show_menu();
 void menu_repl(GRAPH* graph, map<int, string> &stations);
 void print_schedules(GRAPH* graph, map<int, string> &stations);
 
@@ -76,7 +76,9 @@ int main(int argc, char **argv)
 		trainsFile >> depart;
 		trainsFile >> arrive;
 
-		graph->set_edge(from, to,  pair<int,int>(depart, arrive));
+		sched* schedule = new sched(depart, arrive);
+		graph->set_edge(from, to,  schedule);
+		graph->print_data(from,to);
 		cout << "Set edge for " << stations.at(from) << " to " << stations.at(to) << endl;
 	}
 
@@ -180,7 +182,7 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-void showMenu() {
+void show_menu() {
     cout << "  _ __ ___   ___ _ __  _   _ \n";
     cout << " | \"_ ` _ \\ / _ \\ \"_ \\| | | |\n";
     cout << " | | | | | |  __/ | | | |_| |\n";
@@ -205,8 +207,8 @@ void showMenu() {
 void menu_repl(GRAPH* graph, map<int, string> &stations) {
     int option;
 
+	show_menu();
     while (option != EOF) {
-        showMenu();
         cin >> option;
 
         switch (option) {
@@ -243,12 +245,17 @@ void print_schedules(GRAPH* graph, map<int, string> &stations) {
 	for (map<int,string>::iterator it=stations.begin(); it!=stations.end(); ++it){
 		int station_id = it->first;
 		string station_name = it->second;
+
+		cout << " ------------------------- \n";
+		cout << "  Schedule for " << station_name << "|\n";
+		cout << " ------------------------- \n";
+
 		//get schedule for station
-		vector<sched*>* schedule = graph->get_schedule(station_id);
+		vector<vector<int> > schedule = graph->get_schedule(station_id);
 
 		// print schedules
-		for (vector<sched*>::iterator it=schedule->begin(); it!=schedule->end(); ++it){
-			vector<sched*>* schedule = graph->get_schedule(station_id);
+		for (vector<vector<int> >::iterator it=schedule.begin(); it!=schedule.end(); ++it){
+			cout << stations.at(it->front()) << ": " << it->at(1) << " - " << it->at(2) << "\n";
 		}
 	}
 }
