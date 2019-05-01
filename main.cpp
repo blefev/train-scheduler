@@ -204,30 +204,30 @@ void show_menu() {
 
 /* TODO how to reset terminal to show menu after height exceeded? */
 void menu_repl(GRAPH* graph, map<int, string> &stations) {
-    int option;
+    char option;
 	int station_id;
 	int station_id_a;
 	string station_name;
 	bool found = false;
 
 	show_menu();
-    while (option != EOF) {
+    while (option != '9') {
 		cout << "Enter option:  ";
         cin >> option;
 
         switch (option) {
-            case 1: //view train schedule.
+            case '1': //view train schedule.
 					// iterate through all stations and show schedule
 				vector<sched> *traversal;
 				print_schedules(graph, stations);
 
                 break;
-            case 2:
+            case '2':
 				cout << "Please enter the station ID: ";
 				cin >> station_id;
 				print_schedule(graph, stations, station_id);
                 break;
-            case 3:
+            case '3':
 
 				cout << "Please enter the station name: ";
 				cin >> station_name;
@@ -244,7 +244,7 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				found = false;
 
 				break;
-			case 4:
+			case '4':
 				cout << "Please enter the station ID: ";
 				cin >> station_id;
 				if (stations.find(station_id) == stations.end()) {
@@ -255,7 +255,7 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 
 				break;
 
-			case 5:
+			case '5':
 				cout << "Enter departure station ID: ";
 				cin >> station_id;
 
@@ -269,18 +269,17 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				}
 
 				break;
-			case 6:
+			case '6':
 				break;
-			case 7:
+			case '7':
 				break;
-			case 8:
+			case '8':
 				break;
-			case 9:
+			case '9':
 				exit(0);
 				break;
 			default:
-				cout << "Invalid option, please try again";
-				break;
+				cout << "Invalid option, please try again\n";
 		}
 	}
 }
