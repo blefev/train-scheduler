@@ -7,19 +7,19 @@ GRAPH::GRAPH(int nodes)
 {
 	this->node_count = nodes;
 
-	this->data = new sched*[nodes];
+	this->data = new sched**[nodes];
 	for (int i = 0; i <= nodes; i++) {
-		this->data[i] = new sched[nodes];
+		this->data[i] = new sched*[nodes];
 		for (int j = 0; j <= nodes; j++) {
-			this->data[i][j].first = 0;
-			this->data[i][j].second = 0;
+			this->data[i][j] = NULL;
 		}
 	}
 }
 
 void GRAPH::set_edge(int source, int destination, sched schedule)
 {
-	this->data[source][destination] = schedule;
+
+	this->data[source][destination] = &schedule;
 }
 
 void GRAPH::print_data()
@@ -34,7 +34,7 @@ void GRAPH::print_data()
 	for (int i=0; i <= this->node_count; i++) {
 		std::cout<<i<<" |";
 		for (int j=1; j <= this->node_count; j++) {
-			std::cout<<setw(3)<<this->data[i][j].first << ", " << this->data[i][j].second;
+			std::cout<<setw(3)<<this->data[i][j]->first << ", " << this->data[i][j]->second;
 		}
 		cout << std::endl;
 	}
@@ -55,7 +55,7 @@ vector<int> *GRAPH::dfs(int start)
 		traversal->push_back(cur);
 		discovered.insert(cur);
 		for (int i=0; i <= this->node_count; i++) {
-			if ((this->data[cur][i].first - this->data[cur][i].second) > 0) {
+			if ((this->data[cur][i]->first - this->data[cur][i]->second) > 0) {
 				st.push(i);
 			}
 		}
@@ -81,7 +81,7 @@ vector<int> *GRAPH::bfs(int start)
 		traversal->push_back(cur);
 
 		for (int i=0; i <= this->node_count; i++) {
-			if ((this->data[cur][i].first - this->data[cur][i].second) > 0) {
+			if ((this->data[cur][i]->first - this->data[cur][i]->second) > 0) {
 
 				std::cout<<"Found adjv " << i << std::endl;
 				if (discovered.count(i) == 0) {
@@ -135,10 +135,10 @@ int GRAPH::dijkstra(int src, int dst)
 
 
 		for (int vert=0; vert < this->node_count; vert++) {
-			if (vertexSet[vert] == false && this->data[minNode][vert].first > 0) {
+			if (vertexSet[vert] == false && this->data[minNode][vert]->first > 0) {
 				if (distances[minNode] != INT_MAX && distances[minNode] 
-						+ (this->data[minNode][vert].first - this->data[minNode][vert].second) < distances[vert]) {
-					distances[vert] = distances[minNode] + (this->data[minNode][vert].first - this->data[minNode][vert].second);
+						+ (this->data[minNode][vert]->first - this->data[minNode][vert]->second) < distances[vert]) {
+					distances[vert] = distances[minNode] + (this->data[minNode][vert]->first - this->data[minNode][vert]->second);
 				}
 			}
 		}

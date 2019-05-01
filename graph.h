@@ -40,6 +40,6 @@ private:
 	// keep track of the number of nodes in the graph
 	int node_count;
 	// this represents the adjacency matrix
-	sched **data;
+	sched ***data;
 };
 #endif

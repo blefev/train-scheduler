@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 	}
 
 	/*
-	 * TODO 
+	 * TODO
 	 *
 	 * ok, so trains are not going to be represented by objects
 	 * they are abstractions of the vertices, and will dictate how
@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 
 	// TODO need ADT for weight
 	// maybe change weight to pair. need to
-	// account for this in the graph	
+	// account for this in the graph
 	int from, to, depart, arrive;
 	while (trainsFile >> from) {
 		trainsFile >> to;
@@ -74,6 +74,7 @@ int main(int argc, char **argv)
 		trainsFile >> arrive;
 
 		graph->set_edge(from, to,  pair<int,int>(depart, arrive));
+		cout << "Set edge for " << stations.at(from) << " to " << stations.at(to) << endl;
 	}
 	/*
 	GRAPH *g = NULL;
