@@ -23,7 +23,7 @@ public:
 	// Set the edge going from src to dst
 	void set_edge(int src, int dst, sched* schedule);
 	// Print the graph's data
-	void print_data(int source, int destination);
+	bool service_available(int source, int destination);
 
 	// find station schedule by id
 	vector<vector<int> > get_schedule(int stationId);

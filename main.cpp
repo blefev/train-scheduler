@@ -79,7 +79,6 @@ int main(int argc, char **argv)
 
 		sched* schedule = new sched(depart, arrive);
 		graph->set_edge(from, to,  schedule);
-		graph->print_data(from,to);
 		cout << "Set edge for " << stations.at(from) << " to " << stations.at(to) << endl;
 	}
 
@@ -199,7 +198,6 @@ void show_menu() {
     cout << "( 8 )  Find Route with Shortest Total Travel Time\n";
     cout << "( 9 )  Exit\n";
     cout << "========================================================\n";
-    cout << "Enter option:  ";
 }
 
 
@@ -207,9 +205,14 @@ void show_menu() {
 /* TODO how to reset terminal to show menu after height exceeded? */
 void menu_repl(GRAPH* graph, map<int, string> &stations) {
     int option;
+	int station_id;
+	int station_id_a;
+	string station_name;
+	bool found = false;
 
 	show_menu();
     while (option != EOF) {
+		cout << "Enter option:  ";
         cin >> option;
 
         switch (option) {
@@ -221,29 +224,65 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
                 break;
             case 2:
 				cout << "Please enter the station ID: ";
-				int station_id;
 				cin >> station_id;
 				print_schedule(graph, stations, station_id);
                 break;
             case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
-            case 7:
-                break;
-            case 8:
-                break;
-            case 9:
-                exit(0);
-                break;
-            default:
-                cout << "Invalid option, please try again";
-        }
-    }
+
+				cout << "Please enter the station name: ";
+				cin >> station_name;
+
+				for (map<int,string>::iterator it=stations.begin(); it!=stations.end(); ++it){
+					if (it->second == station_name) {
+						found = true;
+						cout << "Station ID for " << station_name << ": " << it->first << "\n";
+					}
+				}
+				if (!found) {
+					cout << "No station ID found\n";
+				}
+				found = false;
+
+				break;
+			case 4:
+				cout << "Please enter the station ID: ";
+				cin >> station_id;
+				if (stations.find(station_id) == stations.end()) {
+					cout << "Invalid station ID\n";
+				} else {
+					cout << "Station name: " << stations.at(station_id) << "\n";
+				}
+
+				break;
+
+			case 5:
+				cout << "Enter departure station ID: ";
+				cin >> station_id;
+
+				cout << "Enter destination station ID: ";
+				cin >> station_id_a;
+
+				if (graph->service_available(station_id, station_id_a)) {
+					cout << "Service IS available\n";
+				} else {
+					cout << "Service IS NOT available\n";
+				}
+
+				break;
+			case 6:
+				break;
+			case 7:
+				break;
+			case 8:
+				break;
+			case 9:
+				exit(0);
+				break;
+			default:
+				cout << "Invalid option, please try again";
+				break;
+		}
+	}
 }
 
 void print_schedules(GRAPH* graph, map<int, string> &stations) {
@@ -255,18 +294,18 @@ void print_schedules(GRAPH* graph, map<int, string> &stations) {
 }
 
 void print_schedule(GRAPH* graph, map<int, string> &stations, int station_id) {
-		string station_name = stations.at(station_id);
+	string station_name = stations.at(station_id);
 
-		cout << "------------------------- \n";
-		cout << " " << station_name << "\n";
-		cout << "------------------------- \n";
+	cout << "------------------------- \n";
+	cout << " " << station_name << "\n";
+	cout << "------------------------- \n";
 
-		//get schedule for station
-		vector<vector<int> > schedule = graph->get_schedule(station_id);
+	//get schedule for station
+	vector<vector<int> > schedule = graph->get_schedule(station_id);
 
-		// print schedules
-		for (vector<vector<int> >::iterator it=schedule.begin(); it!=schedule.end(); ++it){
-			cout << "  " << stations.at(it->front()) << ": " << it->at(1) << " - " << it->at(2) << "\n";
-		}
-		cout << "\n";
+	// print schedules
+	for (vector<vector<int> >::iterator it=schedule.begin(); it!=schedule.end(); ++it){
+		cout << "  " << stations.at(it->front()) << ": " << it->at(1) << " - " << it->at(2) << "\n";
+	}
+	cout << "\n";
 }

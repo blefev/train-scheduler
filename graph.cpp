@@ -22,9 +22,9 @@ void GRAPH::set_edge(int source, int destination, sched* schedule)
 	this->data[source][destination] = schedule;
 }
 
-void GRAPH::print_data(int source, int destination)
+bool GRAPH::service_available(int source, int destination)
 {
-	cout << "Edges in get_schedule: " << this->data[source][destination]->first << " : " << this->data[source][destination]->second << "\n";
+	return this->data[source][destination] != NULL;
 	/*
 	std::cout<<"    ";
 
