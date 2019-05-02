@@ -268,7 +268,7 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				cout << "Enter destination station ID: ";
 				cin >> station_id_a;
 
-				if (graph->service_available(station_id, station_id_a)) {
+				if (graph->bfs(station_id, station_id_a, false)) {
 					cout << "Service IS available\n";
 				} else {
 					cout << "Service IS NOT available\n";
@@ -277,6 +277,17 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				break;
 			case '6':
                 // non stop service
+				cout << "Enter departure station ID: ";
+				cin >> station_id;
+
+				cout << "Enter destination station ID: ";
+				cin >> station_id_a;
+
+				if (graph->bfs(station_id, station_id_a, true)) {
+					cout << "Service IS available\n";
+				} else {
+					cout << "Service IS NOT available\n";
+				}
 				break;
 			case '7':
                 // shortest riding time

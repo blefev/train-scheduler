@@ -24,9 +24,9 @@ bool GRAPH::service_available(int source, int destination)
 vector<int> *GRAPH::dfs(int start)
 {
     vector<int> *traversal = new vector<int>();
-    std::set<int> discovered;
+    set<int> discovered;
 
-    std::stack<int> st;
+    stack<int> st;
     st.push(start);
 
     while (!st.empty()) {
@@ -46,35 +46,53 @@ vector<int> *GRAPH::dfs(int start)
     return traversal;
 }
 
-vector<int> *GRAPH::bfs(int start)
+bool GRAPH::bfs(int start, int dst, bool nonstop)
 {
     vector<int> *traversal = new vector<int>();
 
-    std::queue<int> frontier;
-    std::set<int> discovered;
+    queue<int> frontier;
+    set<int> discovered;
 
     frontier.push(start);
     discovered.insert(start);
 
     while(!frontier.empty()) {
         int cur = frontier.front();
+
+        if (cur == dst) {
+            return true;
+        }
+
         frontier.pop();
         traversal->push_back(cur);
 
         for (int i=1; i <= this->node_count; i++) {
             if (!this->data[cur][i].empty()) {
-
-                std::cout<<"Found adjv " << i << std::endl;
-
+                // check if this is nonstop
                 if (discovered.count(i) == 0) {
-                    frontier.push(i);
-                    discovered.insert(i);
+                    if (nonstop) {
+                        if (traversal->size() >= 2) {
+                            int prevStation = traversal->at(traversal->size()-2); //second to last
+                            sched prev = this->data[prevStation][cur];
+                            sched next = this->data[cur][i];
+
+                            // departure minus arrival
+                            // considering nonstop as meaning within 1 minute
+                            if (!(next.at(0) - prev.at(1) > 1)) {
+                                frontier.push(i);
+                                discovered.insert(i);
+                            }
+                        }
+                    } else {
+                        frontier.push(i);
+                        discovered.insert(i);
+                    }
+
                 }
             }
         }
     }
-
-    return traversal;
+    return false;
 }
 
 bool GRAPH::empty(vector<bool> set) {
@@ -197,7 +215,7 @@ int GRAPH::t_diff(int a, int b) {
 
 int GRAPH::dijkstra(int src, int dst)
 {
-    std::vector<bool> vertex_set;
+    vector<bool> vertex_set;
     int distances[this->node_count];
     int minNode;
     int minDistance;
@@ -220,7 +238,7 @@ int GRAPH::dijkstra(int src, int dst)
             }
         }
 
-        std::cout << "minNode: " << minNode << endl;
+        cout << "minNode: " << minNode << endl;
 
         vertex_set[minNode] = true;
 

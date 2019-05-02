@@ -35,7 +35,7 @@ public:
 	vector<int> *dfs(int start);
 	// perform a bfs from the provided start node. Returns a vector containing
 	// the search results
-	vector<int> *bfs(int start);
+	bool bfs(int start, int dst, bool nonstop );
 	// Use dijkstra's to find the shortest distance from a source node to 
 	// a destination node. Returns the minimum distance between the two or
 	// -1 if a path does not exist
