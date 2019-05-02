@@ -124,34 +124,33 @@ vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
                     // weight
                     sched s = this->data[currentV][adjV];
 
-                    if (predecessors[currentV] > 0) {
-                        //check times are valid
-                        int p = predecessors[currentV];
-                        if (this->data[p][currentV].at(1) > this->data[currentV][adjV].at(0)) {
-                            continue;
-                            predecessors[adjV] = 0;
-                        }
-                    }
-
                     //cout << "at(0):at(1) " << s.at(0) << " : "<< s.at(1) << "\n";
                     // time in minutes trip takes, aka weight
-                    int weight = t_diff(s.at(0), s.at(1));
-                    //cout << "weight for " << currentV <<" to "<<adjV << ": "<<weight<<"\n";
+                    int weight;
+                    weight = t_diff(s.at(0), s.at(1));
+
+                    if (layovers && predecessors[currentV] > 0) { // already have predecessor
+                        // determine layover 
+                        int pre = predecessors[currentV];
+                        vector<int> schedA = this->data[pre][currentV];
+                        vector<int> schedB = this->data[currentV][adjV];
+
+                        // arrival of A later than departure of B
+                        if (schedA.at(1) > schedB.at(0)) { 
+                            // add 24 hours to layover
+                            weight += t_diff(schedA.at(1), schedB.at(0) + 2400);
+                        } else {
+                            weight += t_diff(schedA.at(1), schedB.at(0));
+                        }
+                    }                    //cout << "weight for " << currentV <<" to "<<adjV << ": "<<weight<<"\n";
                     int alt_dist;
 
-                    if (layovers) {
-                        // add time diff between 
-                        // predecessor arrival time 
-                        // from this->data[predecessor[currentV]][currentV]
-                        // and next node leave time??
-                    } else {
-                        alt_dist = distances[currentV] + weight;
-                        //cout << "distance to " << currentV << " from src: " << alt_dist << "\n";
+                    alt_dist = distances[currentV] + weight;
+                    //cout << "distance to " << currentV << " from src: " << alt_dist << "\n";
 
-                        if (alt_dist < distances[adjV]) {
-                            distances[adjV] = alt_dist;
-                            predecessors[adjV] = currentV;
-                        }
+                    if (alt_dist < distances[adjV]) {
+                        distances[adjV] = alt_dist;
+                        predecessors[adjV] = currentV;
                     }
                 }
 

@@ -296,6 +296,18 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				break;
 			case '8':
                 // shortest total time
+				cout << "Enter departure station ID: ";
+				cin >> station_id;
+				cout << "Enter destination station ID: ";
+				cin >> station_id_a;
+
+                path = graph->path(station_id, station_id_a, true);
+
+                cout << "Shortest path : \n";
+                for (auto it = path.begin(); it != path.end(); it++) {
+                    cout << *it << " " << endl;
+                }
+                cout << "\n";
 				break;
 			case '9':
 				exit(0);
