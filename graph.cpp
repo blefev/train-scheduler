@@ -70,18 +70,16 @@ bool GRAPH::bfs(int start, int dst, bool nonstop)
             if (!this->data[cur][i].empty()) {
                 // check if this is nonstop
                 if (discovered.count(i) == 0) {
-                    if (nonstop) {
-                        if (traversal->size() >= 2) {
-                            int prevStation = traversal->at(traversal->size()-2); //second to last
-                            sched prev = this->data[prevStation][cur];
-                            sched next = this->data[cur][i];
+                    if (nonstop && traversal->size() >= 2) {
+                        int prevStation = traversal->at(traversal->size()-2); //second to last
+                        sched prev = this->data[prevStation][cur];
+                        sched next = this->data[cur][i];
 
-                            // departure minus arrival
-                            // considering nonstop as meaning within 1 minute
-                            if (!(next.at(0) - prev.at(1) > 1)) {
-                                frontier.push(i);
-                                discovered.insert(i);
-                            }
+                        // departure minus arrival
+                        // considering nonstop as meaning within 1 minute
+                        if (!(next.at(0) - prev.at(1) > 1)) {
+                            frontier.push(i);
+                            discovered.insert(i);
                         }
                     } else {
                         frontier.push(i);
