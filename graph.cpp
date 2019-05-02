@@ -105,12 +105,6 @@ bool GRAPH::empty(vector<bool> set) {
 // layovers false -> don't count layovers
 // layovers true  -> do count layovers
 vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
-    //  TODO TODO TODO TODO TODO TODO TODO
-    //   YOU CANNOT GO BACKWARDS IN TIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //   YOU CANNOT GO BACKWARDS IN TIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //   YOU CANNOT GO BACKWARDS IN TIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //   Remember to implement layover times!!!!!!
-    //
     vector<int> shortest_path; 
     vector<bool> vertex_set;
     int predecessors[this->node_count];
@@ -158,7 +152,8 @@ vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
                         } else {
                             weight += t_diff(schedA.at(1), schedB.at(0));
                         }
-                    }                    //cout << "weight for " << currentV <<" to "<<adjV << ": "<<weight<<"\n";
+                    }                    
+                    //cout << "weight for " << currentV <<" to "<<adjV << ": "<<weight<<"\n";
                     int alt_dist;
 
                     alt_dist = distances[currentV] + weight;
@@ -273,4 +268,11 @@ vector<vector<int> > GRAPH::get_schedule(int station_id) {
         }
     }
     return trains;
+}
+
+void GRAPH::print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path) {
+    for (int i=0; i <= path.size() - 1; i++) {
+        int j = i + 1;
+        sched item = data[path.at(i)][path.at(j)];
+    }
 }

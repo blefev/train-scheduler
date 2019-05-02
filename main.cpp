@@ -11,6 +11,7 @@ void show_menu();
 void menu_repl(GRAPH* graph, map<int, string> &stations);
 void print_schedules(GRAPH* graph, map<int, string> &stations);
 void print_schedule(GRAPH* graph, map<int, string> &stations, int station_id); 
+void print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path);
 
 
 int main(int argc, char **argv)
@@ -52,6 +53,7 @@ int main(int argc, char **argv)
 		// trains would be the vertices, and stations would be the nodes
 
 	}
+    stationsFile.close();
 
 	/* TODO CREATE A GRAPH RIGHT HNAH!!! */
 
@@ -85,104 +87,13 @@ int main(int argc, char **argv)
         cout << "Service available? : " << graph->service_available(from, to) << "\n";
 		cout << "Set edge for " << stations.at(from) << " to " << stations.at(to) << endl;
 	}
+    trainsFile.close();
 
 	// now that we have the pieces set up, we can start the menu repl
 	menu_repl(graph, stations);
 
-	/*
-	GRAPH *g = NULL;
-	vector<int> *traversal;
-	vector<int> *min_tree;
-	int node_count;
-	int nodes, edges, source, destination, cmd, p1, p2, w;
-	int mode;
-	int weight;
-	int i;
-	bool directed;
+    delete graph;
 
-    if(argc < 2)
-    {
-        cout << "useage: ./graph.out edges.txt cmd.txt\n";
-        return -1;
-    }
-
-
-	// check if this is a directed graph
-	file >> mode;
-
-	// get the number of nodes
-	file >> node_count;
-
-	// initalize the new graph
-	g = new GRAPH(directed, node_count);
-
-	// read in the edges of our graph
-	while (file >> source)
-	{
-		file >> destination;
-		file >> weight;
-		g->set_edge(source, destination, weight);
-	}
-	file.close();
-
-	// open the file that contains the cmd information
-    file.open(argv[2]);
-	if (!file.is_open())
-	{
-		cout << "Error: Failed to open cmd file\n";
-		return 0;
-	}
-
-	while (file >> cmd)
-	{
-		switch (cmd)
-		{
-			case 1:
-				file >> p1;
-				traversal = g->dfs(p1);
-				if(NULL == traversal)
-				{
-					cout << "Could not complete traversal\n";
-				}
-				cout << "DFS from " << p1 << ":\n";
-				for(i=0;i<traversal->size();i++)
-				{
-					cout << traversal->at(i) << " ";
-				}
-				cout << endl;
-				break;
-			case 2:
-				file >> p1;
-				traversal = g->bfs(p1);
-				if(NULL == traversal)
-				{
-					cout << "Could not complete traversal\n";
-				}
-				cout << "BFS from " << p1 << ":\n";
-				for(i=0;i<traversal->size();i++)
-				{
-					cout << traversal->at(i) << " ";
-				}
-				cout << endl;
-				break;
-			case 3:
-				file >> p1;
-				file >> p2;
-				i = g->dijkstra(p1, p2);
-				cout << "Distance from " << p1 << " to " << p2 << ": " << i << endl;
-				break;
-			case 4:
-				file >> p1;
-				min_tree = g->primm(p1);
-				pretty_print_mst(min_tree, p1);
-				break;
-			default:
-				cout << "Error: Unknown cmd\n";
-		}
-	}
-
-	file.close();
-	*/
 	return 0;
 }
 
@@ -327,6 +238,11 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				cout << "Invalid option, please try again\n";
 		}
 	}
+}
+void print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path) {
+    for (int i=0; i <= path.size(); i++) {
+
+    }
 }
 
 void print_schedules(GRAPH* graph, map<int, string> &stations) {
