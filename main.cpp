@@ -103,12 +103,13 @@ void show_menu() {
     cout << " | | | | | |  __/ | | | |_| |\n";
     cout << " |_| |_| |_|\\___|_| |_|\\__,_|\n";
     cout << "========================================================\n";
+    cout << "( m, h )  View this menu\n";
     cout << "( 1 )  View Train Schedule\n";
     cout << "( 2 )  View Station Schedule\n";
     cout << "( 3 )  Look Up Station ID\n";
     cout << "( 4 )  Look Up Station Name\n";
     cout << "( 5 )  Check Service Availability\n";
-    cout << "( 6 )  Check Non-Stop Service Availability\n";
+    cout << "( 6 )  Check Non-Stop Service Availability (arrival and departure within 1 minute)\n";
     cout << "( 7 )  Find Route with Shortest Riding Time\n";
     cout << "( 8 )  Find Route with Shortest Total Travel Time\n";
     cout << "( 9 )  Exit\n";
@@ -129,9 +130,14 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 	show_menu();
     while (option != '9') {
 		cout << "Enter option:  ";
+		cin.clear();
         cin >> option;
 
         switch (option) {
+			case 'm':
+			case 'h':
+				show_menu();
+				break;
             case '1': //view train schedule.
 					// iterate through all stations and show schedule
 				vector<sched> *traversal;
@@ -172,7 +178,6 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				break;
 
 			case '5':
-                // TODO TODO TODO this needs to do a SEARCH!!!
 				cout << "Enter departure station ID: ";
 				cin >> station_id;
 
@@ -180,9 +185,9 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				cin >> station_id_a;
 
 				if (graph->bfs(station_id, station_id_a, false)) {
-					cout << "Service IS available\n";
+					cout << "Service is available\n";
 				} else {
-					cout << "Service IS NOT available\n";
+					cout << "Service is not available\n";
 				}
 
 				break;
@@ -195,9 +200,9 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				cin >> station_id_a;
 
 				if (graph->dfs(station_id, station_id_a, true)) {
-					cout << "Service IS available\n";
+					cout << "Non-stop service is available\n";
 				} else {
-					cout << "Service IS NOT available\n";
+					cout << "Non-stop service is not available\n";
 				}
 				break;
 			case '7':
@@ -230,6 +235,7 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 			default:
 				cout << "Invalid option, please try again\n";
 		}
+		cout << endl;
 	}
 }
 
@@ -244,9 +250,9 @@ void print_schedules(GRAPH* graph, map<int, string> &stations) {
 void print_schedule(GRAPH* graph, map<int, string> &stations, int station_id) {
 	string station_name = stations.at(station_id);
 
-	cout << "------------------------- \n";
-	cout << " " << station_name << " (" << station_id << ")\n";
-	cout << "------------------------- \n";
+	//cout << "------------------------- \n";
+	cout << station_name << " (" << station_id << ")\n";
+	//cout << "------------------------- \n";
 
 	//get schedule for station
 	vector<vector<int> > schedule = graph->station_schedule(station_id);
@@ -272,7 +278,7 @@ void print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path)
 		char arrive[6];
 		sprintf(arrive, "%02d:%02d\0", (item.at(1) / 100), (item.at(1) % 100));
 
-		cout << "  Depart " << stations.at(A) << " at  " << depart << "\n";
-		cout << "  Arrive at "<< stations.at(B) << " at " << arrive << "\n\n";
+		cout << "  Depart " << stations.at(A) << " at:\t" << depart << "\n";
+		cout << "  Arrive at "<< stations.at(B) << " at\t" << arrive << "\n\n";
 	}
 }
