@@ -1,3 +1,14 @@
+/*
+ * Author: Brendan Lefevre <brendan.lefevre@trojans.dsu.edu>
+ *
+ * Important notes: A trip that spans multiple days IS allowed, but it is factored
+ * into the weight for calculating the total trip time. It is ignored for shortest
+ * riding time.
+ *
+ * A trip is considered to be non-stop when the difference between arrival and departure
+ * of connecting trains is at most 1 minute.
+ *
+ */
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -18,6 +29,7 @@ void check_service_availability(GRAPH* graph, map<int, string> &stations, bool n
 void find_route(GRAPH* graph, map<int, string> &stations, bool count_layovers);
 void view_station_schedule(GRAPH* graph, map<int, string> &stations);
 GRAPH* perform_setup(map<int, string> &stations);
+string time_to_s(int time);
 
 int main(int argc, char **argv)
 {
@@ -104,7 +116,7 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 
 	show_menu();
     while (option != '9') {
-		cout << "Enter option:  ";
+		cout << "Enter option (m for menu):  ";
 		cin.clear();
         cin >> option;
 
@@ -150,6 +162,9 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 }
 
 void print_schedules(GRAPH* graph, map<int, string> &stations) {
+	cout << "\nView Train Schedule\n";
+	cout << "---------------------\n";
+
 	for (map<int,string>::iterator it=stations.begin(); it!=stations.end(); ++it){
 		int station_id = it->first;
 
@@ -162,31 +177,35 @@ void print_schedule(GRAPH* graph, map<int, string> &stations, int station_id) {
 
 	//cout << "------------------------- \n";
 	cout << station_name << " (" << station_id << ")\n";
-	//cout << "------------------------- \n";
+	cout << "------------------ \n";
 
 	//get schedule for station
 	vector<vector<int> > schedule = graph->station_schedule(station_id);
 
-	// print schedules
-	for (vector<vector<int> >::iterator it=schedule.begin(); it!=schedule.end(); ++it){
-		cout << "  " << stations.at(it->front()) << ": " << it->at(1) << " - " << it->at(2) << "\n";
+	if (schedule.empty()) {
+		cout << "  No trains scheduled\n";
+	} else {
+		// print schedules
+		for (vector<vector<int> >::iterator it=schedule.begin(); it!=schedule.end(); ++it){
+			cout << "  " << stations.at(it->front()) << ": ";
+			cout << time_to_s(it->at(1)) << " - " << time_to_s(it->at(2)) << "\n";
+		}
 	}
 	cout << "\n";
 }
 
 void print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path) {
-	cout << "Itenerary:\n";
+	cout << "\nItenerary\n";
 	cout << "------------\n";
+
 	for (int i=0; i < path.size() - 1; i++) {
 		int j = i + 1;
 		int A = path.at(i);
 		int B = path.at(j);
 		sched item = graph->train_schedule(A, B);
 
-		char depart[6];
-		sprintf(depart, "%02d:%02d\0", (item.at(0) / 100), (item.at(0) % 100));
-		char arrive[6];
-		sprintf(arrive, "%02d:%02d\0", (item.at(1) / 100), (item.at(1) % 100));
+		string depart = time_to_s(item.at(0));
+		string arrive = time_to_s(item.at(1));
 
 		cout << "  Depart " << stations.at(A) << " at:\t" << depart << "\n";
 		cout << "  Arrive at "<< stations.at(B) << " at\t" << arrive << "\n\n";
@@ -194,6 +213,9 @@ void print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path)
 }
 
 void lookup_station_id(GRAPH* graph, map<int, string> &stations) {
+	cout << "\nLook up station ID\n";
+	cout << "---------------------\n";
+
 	bool found = false;
 	int station_id;
 	string station_name;
@@ -213,6 +235,9 @@ void lookup_station_id(GRAPH* graph, map<int, string> &stations) {
 }
 
 void lookup_station_name(GRAPH* graph, map<int, string> &stations) {
+	cout << "\nLook up station name\n";
+	cout << "---------------------\n";
+
 	int station_id;
 
 	cout << "Please enter the station ID: ";
@@ -225,6 +250,10 @@ void lookup_station_name(GRAPH* graph, map<int, string> &stations) {
 }
 
 void check_service_availability(GRAPH* graph, map<int, string> &stations, bool nonstop) {
+
+	cout << "\nCheck" << (nonstop ? " Non-Stop " : " ") << "Service Availability\n";
+	cout << "---------------------\n";
+
 	int station_id, station_id_a;
 
 	cout << "Enter departure station ID: ";
@@ -241,6 +270,9 @@ void check_service_availability(GRAPH* graph, map<int, string> &stations, bool n
 }
 
 void find_route(GRAPH* graph, map<int, string> &stations, bool count_layovers) {
+	cout << "\nFind Route with Shortest"<< (count_layovers ? " Riding " : " Total ") << "Time\n";
+	cout << "---------------------\n";
+
 	int station_id, station_id_a;
 	vector<int> path;
 
@@ -255,10 +287,20 @@ void find_route(GRAPH* graph, map<int, string> &stations, bool count_layovers) {
 }
 
 void view_station_schedule(GRAPH* graph, map<int, string> &stations) {
+	cout << "\nView Station Schedule\n";
+	cout << "---------------------\n";
+
 	int station_id;
 
 	cout << "Please enter the station ID: ";
 	cin >> station_id;
 	print_schedule(graph, stations, station_id);
 
+}
+
+string time_to_s(int time) {
+	char ch[6];
+	sprintf(ch, "%02d:%02d\0", (time / 100), (time % 100));
+	string s(ch);
+	return s;
 }
