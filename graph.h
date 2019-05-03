@@ -25,8 +25,6 @@ public:
 	GRAPH();
 	// Set the edge going from src to dst
 	void set_edge(int src, int dst, sched schedule);
-	// Print the graph's data
-	bool service_available(int source, int destination);
 
 	bool edge_exists(int src, int dst);
 
@@ -37,16 +35,11 @@ public:
 	sched train_schedule(int src, int dst);
 
 	bool empty(vector<bool>);
-	// Perform a dfs from the provided start node. Returns a vector containing
+
+	// Perform a service_available from the provided start node. Returns a vector containing
 	// the search results
-	bool dfs(int start, int dst, bool nonstop);
-	// perform a bfs from the provided start node. Returns a vector containing
-	// the search results
-	bool bfs(int start, int dst, bool nonstop );
-	// Use dijkstra's to find the shortest distance from a source node to 
-	// a destination node. Returns the minimum distance between the two or
-	// -1 if a path does not exist
-	int dijkstra(int, int);
+	bool service_available(int start, int dst, bool nonstop);
+
 	vector<int> path(int, int, bool);
 
     int t_diff (int a, int b);

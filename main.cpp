@@ -315,7 +315,7 @@ void check_service_availability(GRAPH* graph, map<int, string> &stations, bool n
 	if (nonstop) {
 		avail = graph->edge_exists(station_id, station_id2);
 	} else {
-		avail = graph->dfs(station_id, station_id2, nonstop);
+		avail = graph->service_available(station_id, station_id2, nonstop);
 	}
 
 	if (avail) {
