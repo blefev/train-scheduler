@@ -43,11 +43,8 @@ bool GRAPH::dfs(int start, int dst, bool nonstop)
             for (int i=1; i <= this->node_count; i++) {
                 if (!this->data[cur][i].empty()) {
 					if (nonstop) {
-						cout << "Nonstop\n";
 						int departure = this->data[cur][i].at(0);
-						cout << "Departure for " << cur << " to " << i << " is " << departure << "\n";
 						if (arrival == -1 || departure - arrival == 1 || departure - arrival == 0) {
-							cout << "Qualifies for path\n";
 							if (i == dst) {
 								return true;
 							}
@@ -158,7 +155,6 @@ vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
 					// weight
 					sched s = this->data[currentV][adjV];
 
-					//cout << "at(0):at(1) " << s.at(0) << " : "<< s.at(1) << "\n";
 					// time in minutes trip takes, aka weight
 					int weight;
 					weight = t_diff(s.at(0), s.at(1));
@@ -177,11 +173,9 @@ vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
 							weight += t_diff(schedA.at(1), schedB.at(0));
 						}
 					}
-					//cout << "weight for " << currentV <<" to "<<adjV << ": "<<weight<<"\n";
 					int alt_dist;
 
 					alt_dist = distances[currentV] + weight;
-					//cout << "distance to " << currentV << " from src: " << alt_dist << "\n";
 
 					if (alt_dist < distances[adjV]) {
 						distances[adjV] = alt_dist;
@@ -254,8 +248,6 @@ int GRAPH::dijkstra(int src, int dst)
 				minNode = vert;
 			}
 		}
-
-		cout << "minNode: " << minNode << endl;
 
 		vertex_set[minNode] = true;
 
