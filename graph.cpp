@@ -23,7 +23,6 @@ bool GRAPH::service_available(int source, int destination)
 
 bool GRAPH::dfs(int start, int dst, bool nonstop)
 {
-    vector<int> *traversal = new vector<int>();
     set<int> discovered;
 	int predecessors[this->node_count] = {0};
 
@@ -38,7 +37,6 @@ bool GRAPH::dfs(int start, int dst, bool nonstop)
 
         st.pop_back();
         if (discovered.count(cur) == 0) {
-            traversal->push_back(cur);
             discovered.insert(cur);
             for (int i=1; i <= this->node_count; i++) {
                 if (!this->data[cur][i].empty()) {
@@ -194,15 +192,13 @@ vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
 	// to recreate shortest_path, go backwards
 	// following predecessors
 	// may also need to add scheds to this
-	cout << "Looking through predecessors...\n";
 	int tmp = dst;
 	if (predecessors[tmp] > 0) {
 		shortest_path.push_back(dst);
 		while (tmp != src) {
 			int pre = predecessors[tmp];
-			cout << "Tmp: " << tmp << "\n";
-			cout << "Pre: " << pre << "\n";
 			if (pre == 0) {
+				shortest_path.clear();
 				break;
 			}
 

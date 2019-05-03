@@ -209,7 +209,7 @@ void print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path)
 		string arrive = time_to_s(item.at(1));
 
 		cout << "  Depart from " << stations.at(A) << " at:\t" << depart << "\n";
-		cout << "  Arrive at "<< stations.at(B) << " at\t\t" << arrive << "\n\n";
+		cout << "  Arrive at "<< stations.at(B) << " at:\t" << arrive << "\n\n";
 	}
 }
 
@@ -263,13 +263,12 @@ void check_service_availability(GRAPH* graph, map<int, string> &stations, bool n
 	cout << "Enter destination station ID: ";
 	cin >> station_id_a;
 
-	if (graph->bfs(station_id, station_id_a, nonstop)) {
+	if (graph->dfs(station_id, station_id_a, nonstop)) {
 		cout << "Service is available\n";
 	} else {
 		cout << "Service is not available\n";
 	}
 }
-
 void find_route(GRAPH* graph, map<int, string> &stations, bool count_layovers) {
 	cout << "\nFind Route with Shortest"<< (count_layovers ? " Riding " : " Total ") << "Time\n";
 	cout << "---------------------\n";

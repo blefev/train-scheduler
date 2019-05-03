@@ -46,8 +46,6 @@ public:
 	vector<int> path(int, int, bool);
 
     int t_diff (int a, int b);
-
-    void print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path); 
 private:
 	// keep track of the number of nodes in the graph
 	int node_count;
