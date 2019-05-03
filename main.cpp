@@ -10,7 +10,7 @@ using namespace std;
 void show_menu();
 void menu_repl(GRAPH* graph, map<int, string> &stations);
 void print_schedules(GRAPH* graph, map<int, string> &stations);
-void print_schedule(GRAPH* graph, map<int, string> &stations, int station_id); 
+void print_schedule(GRAPH* graph, map<int, string> &stations, int station_id);
 void print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path);
 
 
@@ -215,21 +215,23 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
                 }
                 cout << "\n";
 
+				print_itenerary(graph, stations, path);
+
 				break;
 			case '8':
-                // shortest total time
+				// shortest total time
 				cout << "Enter departure station ID: ";
 				cin >> station_id;
 				cout << "Enter destination station ID: ";
 				cin >> station_id_a;
 
-                path = graph->path(station_id, station_id_a, true);
+				path = graph->path(station_id, station_id_a, true);
 
-                cout << "Shortest path : \n";
-                for (auto it = path.begin(); it != path.end(); it++) {
-                    cout << *it << " " << endl;
-                }
-                cout << "\n";
+				cout << "Shortest path : \n";
+				for (auto it = path.begin(); it != path.end(); it++) {
+					cout << *it << " " << endl;
+				}
+				cout << "\n";
 				break;
 			case '9':
 				exit(0);
@@ -238,11 +240,6 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				cout << "Invalid option, please try again\n";
 		}
 	}
-}
-void print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path) {
-    for (int i=0; i <= path.size(); i++) {
-
-    }
 }
 
 void print_schedules(GRAPH* graph, map<int, string> &stations) {
@@ -261,11 +258,30 @@ void print_schedule(GRAPH* graph, map<int, string> &stations, int station_id) {
 	cout << "------------------------- \n";
 
 	//get schedule for station
-	vector<vector<int> > schedule = graph->get_schedule(station_id);
+	vector<vector<int> > schedule = graph->station_schedule(station_id);
 
 	// print schedules
 	for (vector<vector<int> >::iterator it=schedule.begin(); it!=schedule.end(); ++it){
 		cout << "  " << stations.at(it->front()) << ": " << it->at(1) << " - " << it->at(2) << "\n";
 	}
 	cout << "\n";
+}
+
+void print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path) {
+	cout << "Itenerary:\n";
+	cout << "------------\n";
+	for (int i=0; i < path.size() - 1; i++) {
+		int j = i + 1;
+		int A = path.at(i);
+		int B = path.at(j);
+		sched item = graph->train_schedule(A, B);
+
+		char depart[6];
+		sprintf(depart, "%02d:%02d\0", (item.at(0) / 100), (item.at(0) % 100));
+		char arrive[6];
+		sprintf(arrive, "%02d:%02d\0", (item.at(1) / 100), (item.at(1) % 100));
+
+		cout << "  Depart " << stations.at(A) << " at  " << depart << "\n";
+		cout << "  Arrive at "<< stations.at(B) << " at " << arrive << "\n\n";
+	}
 }

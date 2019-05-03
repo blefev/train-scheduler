@@ -248,7 +248,7 @@ int GRAPH::dijkstra(int src, int dst)
     return distances[dst];
 }
 
-vector<vector<int> > GRAPH::get_schedule(int station_id) {
+vector<vector<int> > GRAPH::station_schedule(int station_id) {
 
 
     vector<vector<int> > trains;
@@ -268,6 +268,10 @@ vector<vector<int> > GRAPH::get_schedule(int station_id) {
         }
     }
     return trains;
+}
+
+sched GRAPH::train_schedule(int src, int dst) {
+	return this->data[src][dst];
 }
 
 void GRAPH::print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path) {

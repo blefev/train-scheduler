@@ -27,7 +27,10 @@ public:
 	bool service_available(int source, int destination);
 
 	// find station schedule by id
-	vector<vector<int> > get_schedule(int stationId);
+	vector<vector<int> > station_schedule(int stationId);
+
+	// find schedule for train
+	sched train_schedule(int src, int dst);
 
 	bool empty(vector<bool>);
 	// Perform a dfs from the provided start node. Returns a vector containing
