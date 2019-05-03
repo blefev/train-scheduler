@@ -143,10 +143,12 @@ vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
 
 	int cur = src;
 
-	// for every vertex in graph
-	for (int i=1; i <= this->node_count; i++) {
+	for (int i=1; i < this->node_count; i++) {
 
 		for (int currentV=1; currentV <= this->node_count; currentV++) {
+			if (distances[currentV] == INT_MAX) {
+				continue;
+			}
 
 			// visit each vertex adjacent to current
 			for (int adjV=1; adjV <= this->node_count; adjV++) {
@@ -192,11 +194,18 @@ vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
 	// to recreate shortest_path, go backwards
 	// following predecessors
 	// may also need to add scheds to this
+	cout << "Looking through predecessors...\n";
 	int tmp = dst;
 	if (predecessors[tmp] > 0) {
 		shortest_path.push_back(dst);
 		while (tmp != src) {
 			int pre = predecessors[tmp];
+			cout << "Tmp: " << tmp << "\n";
+			cout << "Pre: " << pre << "\n";
+			if (pre == 0) {
+				break;
+			}
+
 			shortest_path.insert(shortest_path.begin(), pre);
 			tmp = pre; 
 		}
@@ -288,11 +297,4 @@ vector<vector<int> > GRAPH::station_schedule(int station_id) {
 
 sched GRAPH::train_schedule(int src, int dst) {
 	return this->data[src][dst];
-}
-
-void GRAPH::print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path) {
-	for (int i=0; i <= path.size() - 1; i++) {
-		int j = i + 1;
-		sched item = data[path.at(i)][path.at(j)];
-	}
 }

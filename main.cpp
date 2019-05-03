@@ -208,8 +208,8 @@ void print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path)
 		string depart = time_to_s(item.at(0));
 		string arrive = time_to_s(item.at(1));
 
-		cout << "  Depart " << stations.at(A) << " at:\t" << depart << "\n";
-		cout << "  Arrive at "<< stations.at(B) << " at\t" << arrive << "\n\n";
+		cout << "  Depart from " << stations.at(A) << " at:\t" << depart << "\n";
+		cout << "  Arrive at "<< stations.at(B) << " at\t\t" << arrive << "\n\n";
 	}
 }
 
