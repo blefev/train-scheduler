@@ -79,6 +79,12 @@ GRAPH* perform_setup(map<int, string> &stations) {
 		trainsFile >> depart;
 		trainsFile >> arrive;
 
+		if (arrive < depart) {
+			cout << "Route " <<from<< " to " <<to << " arrives earlier than it departs!\n";
+			cout << "Illegal train, exiting\n";
+			exit(1);
+		}
+
 		sched schedule;
         schedule.push_back(depart);
         schedule.push_back(arrive);
