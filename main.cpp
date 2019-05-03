@@ -209,12 +209,6 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 
                 path = graph->path(station_id, station_id_a, false);
 
-                cout << "Shortest path : \n";
-                for (auto it = path.begin(); it != path.end(); it++) {
-                    cout << *it << " " << endl;
-                }
-                cout << "\n";
-
 				print_itenerary(graph, stations, path);
 
 				break;
@@ -227,11 +221,8 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 
 				path = graph->path(station_id, station_id_a, true);
 
-				cout << "Shortest path : \n";
-				for (auto it = path.begin(); it != path.end(); it++) {
-					cout << *it << " " << endl;
-				}
-				cout << "\n";
+				print_itenerary(graph, stations, path);
+
 				break;
 			case '9':
 				exit(0);
