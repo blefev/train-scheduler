@@ -104,7 +104,7 @@ void show_menu() {
     cout << "( 6 )  Check Non-Stop Service Availability (arrival and departure within 1 minute)\n";
     cout << "( 7 )  Find Route with Shortest Riding Time\n";
     cout << "( 8 )  Find Route with Shortest Total Travel Time\n";
-    cout << "( 9 )  Exit\n";
+    cout << "( 9, q )  Exit\n";
     cout << "========================================================\n";
 }
 
@@ -152,6 +152,7 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				find_route(graph, stations, true);
 				break;
 			case '9':
+			case 'q':
 				exit(0);
 				break;
 			default:
