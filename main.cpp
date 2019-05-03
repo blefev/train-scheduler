@@ -30,6 +30,8 @@ void find_route(GRAPH* graph, map<int, string> &stations, bool count_layovers);
 void view_station_schedule(GRAPH* graph, map<int, string> &stations);
 GRAPH* perform_setup(map<int, string> &stations);
 string time_to_s(int time);
+int t_diff(int a, int b);
+
 
 int main(int argc, char **argv)
 {
@@ -209,14 +211,34 @@ void print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path)
 	cout << "\nItenerary\n";
 	cout << "------------\n";
 
+	sched prev_sched;
+
 	for (int i=0; i < path.size() - 1; i++) {
 		int j = i + 1;
 		int A = path.at(i);
 		int B = path.at(j);
-		sched item = graph->train_schedule(A, B);
+		sched cur_sched = graph->train_schedule(A, B);
 
-		string depart = time_to_s(item.at(0));
-		string arrive = time_to_s(item.at(1));
+		if (!prev_sched.empty()) {
+			int larrive = prev_sched.at(1);
+			int ldepart = cur_sched.at(0);
+
+			if (ldepart < larrive) {
+				ldepart += 2400;
+			}
+
+			// calculate layover in hh:mm
+			int diff_in_seconds = t_diff(larrive, ldepart);
+
+			// seconds to hh:mm
+			int hours = diff_in_seconds / (60 * 60);
+			int minutes = diff_in_seconds % (60 * 60);
+
+			cout << hours <<"h"<<minutes<<"m layover at " << stations.at(A) << "\n\n";
+		}
+
+		string depart = time_to_s(cur_sched.at(0));
+		string arrive = time_to_s(cur_sched.at(1));
 
 		cout << "  Depart from " << stations.at(A) << " at:\t" << depart << "\n";
 		cout << "  Arrive at "<< stations.at(B) << " at:\t" << arrive << "\n\n";
@@ -270,8 +292,21 @@ void check_service_availability(GRAPH* graph, map<int, string> &stations, bool n
 	cout << "Enter departure station ID: ";
 	cin >> station_id;
 
+	while (stations.find(station_id) == stations.end() && station_id != 'q') {
+		cout << "Invalid station ID\n";
+		cout << "Enter departure station ID: ";
+		cin >> station_id;
+	}
+
+
 	cout << "Enter destination station ID: ";
 	cin >> station_id2;
+
+	while (stations.find(station_id2) == stations.end() && station_id2 != 'q' || station_id == station_id2) {
+		cout << "Invalid station ID\n";
+		cout << "Enter destination station ID: ";
+		cin >> station_id2;
+	}
 
 	if (graph->dfs(station_id, station_id2, nonstop)) {
 		cout << "Service is available\n";
@@ -289,6 +324,7 @@ void find_route(GRAPH* graph, map<int, string> &stations, bool count_layovers) {
 
 
 	cout << "Enter departure station ID: ";
+	cin >> station_id;
 
 	while (stations.find(station_id) == stations.end() && station_id != 'q') {
 		cout << "Invalid station ID\n";
@@ -299,7 +335,7 @@ void find_route(GRAPH* graph, map<int, string> &stations, bool count_layovers) {
 	cout << "Enter destination station ID: ";
 	cin >> station_id2;
 
-	while (stations.find(station_id2) == stations.end() && station_id2 != 'q') {
+	while (stations.find(station_id2) == stations.end() && station_id2 != 'q' || station_id == station_id2) {
 		cout << "Invalid station ID\n";
 		cout << "Enter destination station ID: ";
 		cin >> station_id2;
@@ -327,4 +363,23 @@ string time_to_s(int time) {
 	sprintf(ch, "%02d:%02d\0", (time / 100), (time % 100));
 	string s(ch);
 	return s;
+}
+
+int t_diff(int a, int b) {
+	// calculate difference in time 
+	int h1 = a / 100;
+	int m1 = a % 100;
+	int h2 = b / 100;
+	int m2 = b % 100;
+
+	if (m1 > m2) {
+		h2--;
+		m2 += 60;
+	}
+
+	int diff_m = m2 - m1;
+	int diff_h = h2 - h1;
+
+	int minutes = diff_h * 60 + diff_m;
+	return minutes;
 }
