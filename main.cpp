@@ -12,7 +12,7 @@ void menu_repl(GRAPH* graph, map<int, string> &stations);
 void print_schedules(GRAPH* graph, map<int, string> &stations);
 void print_schedule(GRAPH* graph, map<int, string> &stations, int station_id);
 void print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path);
-
+void lookup_station_id(GRAPH* graph, map<int, string> &stations);
 
 int main(int argc, char **argv)
 {
@@ -139,34 +139,18 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				show_menu();
 				break;
             case '1': //view train schedule.
-					// iterate through all stations and show schedule
-				vector<sched> *traversal;
 				print_schedules(graph, stations);
-
                 break;
-            case '2':
+            case '2': // view station schedule
 				cout << "Please enter the station ID: ";
 				cin >> station_id;
 				print_schedule(graph, stations, station_id);
                 break;
-            case '3':
-
-				cout << "Please enter the station name: ";
-				cin >> station_name;
-
-				for (map<int,string>::iterator it=stations.begin(); it!=stations.end(); ++it){
-					if (it->second == station_name) {
-						found = true;
-						cout << "Station ID for " << station_name << ": " << it->first << "\n";
-					}
-				}
-				if (!found) {
-					cout << "No station ID found\n";
-				}
-				found = false;
+            case '3': // look up station id
+				lookup_station_id(graph, stations);
 
 				break;
-			case '4':
+			case '4': // look up station name
 				cout << "Please enter the station ID: ";
 				cin >> station_id;
 				if (stations.find(station_id) == stations.end()) {
@@ -177,7 +161,7 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 
 				break;
 
-			case '5':
+			case '5': // check service availability
 				cout << "Enter departure station ID: ";
 				cin >> station_id;
 
@@ -191,8 +175,7 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				}
 
 				break;
-			case '6':
-                // non stop service
+			case '6': // check non stop service availability
 				cout << "Enter departure station ID: ";
 				cin >> station_id;
 
@@ -205,8 +188,7 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 					cout << "Non-stop service is not available\n";
 				}
 				break;
-			case '7':
-                // shortest riding time
+			case '7': // route w shortest riding time
 				cout << "Enter departure station ID: ";
 				cin >> station_id;
 				cout << "Enter destination station ID: ";
@@ -217,8 +199,7 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				print_itenerary(graph, stations, path);
 
 				break;
-			case '8':
-				// shortest total time
+			case '8': // route w shortest total time
 				cout << "Enter departure station ID: ";
 				cin >> station_id;
 				cout << "Enter destination station ID: ";
@@ -280,5 +261,23 @@ void print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path)
 
 		cout << "  Depart " << stations.at(A) << " at:\t" << depart << "\n";
 		cout << "  Arrive at "<< stations.at(B) << " at\t" << arrive << "\n\n";
+	}
+}
+
+void lookup_station_id(GRAPH* graph, map<int, string> &stations) {
+	bool found = false;
+	int station_id;
+
+	cout << "Please enter the station name: ";
+	cin >> station_name;
+
+	for (map<int,string>::iterator it=stations.begin(); it!=stations.end(); ++it){
+		if (it->second == station_name) {
+			found = true;
+			cout << "Station ID for " << station_name << ": " << it->first << "\n";
+		}
+	}
+	if (!found) {
+		cout << "No station ID found\n";
 	}
 }
