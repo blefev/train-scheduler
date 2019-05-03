@@ -28,6 +28,8 @@ public:
 	// Print the graph's data
 	bool service_available(int source, int destination);
 
+	bool edge_exists(int src, int dst);
+
 	// find station schedule by id
 	vector<vector<int> > station_schedule(int stationId);
 

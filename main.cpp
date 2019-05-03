@@ -113,7 +113,7 @@ void show_menu() {
 	cout << "( 3 )  Look Up Station ID\n";
 	cout << "( 4 )  Look Up Station Name\n";
 	cout << "( 5 )  Check Service Availability\n";
-	cout << "( 6 )  Check Non-Stop Service Availability (arrival and departure within 1 minute)\n";
+	cout << "( 6 )  Check Non-Stop Service Availability\n";
 	cout << "( 7 )  Find Route with Shortest Riding Time\n";
 	cout << "( 8 )  Find Route with Shortest Total Travel Time\n";
 	cout << "( 9, q )  Exit\n";
@@ -228,14 +228,16 @@ void print_itenerary(GRAPH* graph, map<int, string> &stations, vector<int> path)
 			}
 
 			// calculate layover in hh:mm
-			int diff_in_seconds = t_diff(larrive, ldepart);
+			int diff_in_minutes = t_diff(larrive, ldepart);
 
-			// seconds to hh:mm
-			int hours = diff_in_seconds / (60 * 60);
-			int minutes = diff_in_seconds % (60 * 60);
+			// minutes to hh:mm
+			int hours = diff_in_minutes / 60;
+			int minutes = diff_in_minutes % 60;
 
-			cout << hours <<"h"<<minutes<<"m layover at " << stations.at(A) << "\n\n";
+			cout << "  " << hours <<"h"<<minutes<<"m layover at " << stations.at(A) << "\n\n";
 		}
+
+		prev_sched = cur_sched;
 
 		string depart = time_to_s(cur_sched.at(0));
 		string arrive = time_to_s(cur_sched.at(1));
@@ -308,10 +310,18 @@ void check_service_availability(GRAPH* graph, map<int, string> &stations, bool n
 		cin >> station_id2;
 	}
 
-	if (graph->dfs(station_id, station_id2, nonstop)) {
-		cout << "Service is available\n";
+	bool avail = false;
+
+	if (nonstop) {
+		avail = graph->edge_exists(station_id, station_id2);
 	} else {
-		cout << "Service is not available\n";
+		avail = graph->dfs(station_id, station_id2, nonstop);
+	}
+
+	if (avail) {
+		cout << "\nService is available\n";
+	} else {
+		cout << "\nService is not available\n";
 	}
 }
 void find_route(GRAPH* graph, map<int, string> &stations, bool count_layovers) {
