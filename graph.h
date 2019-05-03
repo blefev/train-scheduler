@@ -1,6 +1,8 @@
  #ifndef GRAPH_H
 #define GRAPH_H
 
+#define MAX_NODES 199
+
 #include <map>
 #include <utility>
 #include <cstddef>
@@ -20,7 +22,7 @@ using namespace std;
 class GRAPH{
 public:
 	// Constructor to use when we have an initial number of nodes & edges
-	GRAPH(int nodes);
+	GRAPH();
 	// Set the edge going from src to dst
 	void set_edge(int src, int dst, sched schedule);
 	// Print the graph's data
@@ -50,6 +52,6 @@ private:
 	// keep track of the number of nodes in the graph
 	int node_count;
 	// this represents the adjacency matrix
-    sched data[119][119];
+    sched data[MAX_NODES+1][MAX_NODES+1];
 };
 #endif

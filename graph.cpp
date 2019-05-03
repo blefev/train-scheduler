@@ -3,9 +3,9 @@
 
 
 
-GRAPH::GRAPH(int nodes)
+GRAPH::GRAPH()
 {
-	this->node_count = nodes;
+	this->node_count = MAX_NODES;
 }
 
 void GRAPH::set_edge(int source, int destination, sched schedule)

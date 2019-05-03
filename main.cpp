@@ -63,7 +63,7 @@ GRAPH* perform_setup(map<int, string> &stations) {
 	}
     stationsFile.close();
 
-	GRAPH* graph = new GRAPH(stations.size());
+	GRAPH* graph = new GRAPH();
 
 	ifstream trainsFile;
     trainsFile.open("trains.dat");
@@ -83,61 +83,65 @@ GRAPH* perform_setup(map<int, string> &stations) {
 			cout << "Route " <<from<< " to " <<to << " arrives earlier than it departs!\n";
 			cout << "Illegal train, exiting\n";
 			exit(1);
+        } else if (from == to) {
+			cout << "Train " << from << " has route with itself as destination!\n";
+			cout << "Illegal train, exiting\n";
+			exit(1);
 		}
 
 		sched schedule;
-        schedule.push_back(depart);
-        schedule.push_back(arrive);
+		schedule.push_back(depart);
+		schedule.push_back(arrive);
 		graph->set_edge(from, to,  schedule);
 	}
-    trainsFile.close();
+	trainsFile.close();
 
 	return graph;
 }
 
 void show_menu() {
-    cout << "  _ __ ___   ___ _ __  _   _ \n";
-    cout << " | \"_ ` _ \\ / _ \\ \"_ \\| | | |\n";
-    cout << " | | | | | |  __/ | | | |_| |\n";
-    cout << " |_| |_| |_|\\___|_| |_|\\__,_|\n";
-    cout << "========================================================\n";
-    cout << "( m, h )  View this menu\n";
-    cout << "( 1 )  View Train Schedule\n";
-    cout << "( 2 )  View Station Schedule\n";
-    cout << "( 3 )  Look Up Station ID\n";
-    cout << "( 4 )  Look Up Station Name\n";
-    cout << "( 5 )  Check Service Availability\n";
-    cout << "( 6 )  Check Non-Stop Service Availability (arrival and departure within 1 minute)\n";
-    cout << "( 7 )  Find Route with Shortest Riding Time\n";
-    cout << "( 8 )  Find Route with Shortest Total Travel Time\n";
-    cout << "( 9, q )  Exit\n";
-    cout << "========================================================\n";
+	cout << "  _ __ ___   ___ _ __  _   _ \n";
+	cout << " | \"_ ` _ \\ / _ \\ \"_ \\| | | |\n";
+	cout << " | | | | | |  __/ | | | |_| |\n";
+	cout << " |_| |_| |_|\\___|_| |_|\\__,_|\n";
+	cout << "========================================================\n";
+	cout << "( m, h )  View this menu\n";
+	cout << "( 1 )  View Train Schedule\n";
+	cout << "( 2 )  View Station Schedule\n";
+	cout << "( 3 )  Look Up Station ID\n";
+	cout << "( 4 )  Look Up Station Name\n";
+	cout << "( 5 )  Check Service Availability\n";
+	cout << "( 6 )  Check Non-Stop Service Availability (arrival and departure within 1 minute)\n";
+	cout << "( 7 )  Find Route with Shortest Riding Time\n";
+	cout << "( 8 )  Find Route with Shortest Total Travel Time\n";
+	cout << "( 9, q )  Exit\n";
+	cout << "========================================================\n";
 }
 
 
 
 /* TODO how to reset terminal to show menu after height exceeded? */
 void menu_repl(GRAPH* graph, map<int, string> &stations) {
-    char option;
+	char option;
 
 	show_menu();
-    while (option != '9') {
+	while (option != '9') {
 		cout << "Enter option (m for menu):  ";
 		cin.clear();
-        cin >> option;
+		cin >> option;
 
-        switch (option) {
+		switch (option) {
 			case 'm':
 			case 'h':
 				show_menu();
 				break;
-            case '1': //view train schedule.
+			case '1': //view train schedule.
 				print_schedules(graph, stations);
-                break;
-            case '2': // view station schedule
+				break;
+			case '2': // view station schedule
 				view_station_schedule(graph, stations);
-                break;
-            case '3': // look up station id
+				break;
+			case '3': // look up station id
 				lookup_station_id(graph, stations);
 
 				break;
@@ -261,15 +265,15 @@ void check_service_availability(GRAPH* graph, map<int, string> &stations, bool n
 	cout << "\nCheck" << (nonstop ? " Non-Stop " : " ") << "Service Availability\n";
 	cout << "---------------------\n";
 
-	int station_id, station_id_a;
+	int station_id, station_id2;
 
 	cout << "Enter departure station ID: ";
 	cin >> station_id;
 
 	cout << "Enter destination station ID: ";
-	cin >> station_id_a;
+	cin >> station_id2;
 
-	if (graph->dfs(station_id, station_id_a, nonstop)) {
+	if (graph->dfs(station_id, station_id2, nonstop)) {
 		cout << "Service is available\n";
 	} else {
 		cout << "Service is not available\n";
@@ -279,15 +283,29 @@ void find_route(GRAPH* graph, map<int, string> &stations, bool count_layovers) {
 	cout << "\nFind Route with Shortest"<< (count_layovers ? " Riding " : " Total ") << "Time\n";
 	cout << "---------------------\n";
 
-	int station_id, station_id_a;
+	int station_id, station_id2;
 	vector<int> path;
 
-	cout << "Enter departure station ID: ";
-	cin >> station_id;
-	cout << "Enter destination station ID: ";
-	cin >> station_id_a;
 
-	path = graph->path(station_id, station_id_a, count_layovers);
+
+	cout << "Enter departure station ID: ";
+
+	while (stations.find(station_id) == stations.end() && station_id != 'q') {
+		cout << "Invalid station ID\n";
+		cout << "Enter departure station ID: ";
+		cin >> station_id;
+	}
+
+	cout << "Enter destination station ID: ";
+	cin >> station_id2;
+
+	while (stations.find(station_id2) == stations.end() && station_id2 != 'q') {
+		cout << "Invalid station ID\n";
+		cout << "Enter destination station ID: ";
+		cin >> station_id2;
+	}
+
+	path = graph->path(station_id, station_id2, count_layovers);
 
 	print_itenerary(graph, stations, path);
 }
