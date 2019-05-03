@@ -194,7 +194,7 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				cout << "Enter destination station ID: ";
 				cin >> station_id_a;
 
-				if (graph->bfs(station_id, station_id_a, true)) {
+				if (graph->dfs(station_id, station_id_a, true)) {
 					cout << "Service IS available\n";
 				} else {
 					cout << "Service IS NOT available\n";

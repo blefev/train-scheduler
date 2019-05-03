@@ -35,7 +35,7 @@ public:
 	bool empty(vector<bool>);
 	// Perform a dfs from the provided start node. Returns a vector containing
 	// the search results
-	vector<int> *dfs(int start);
+	bool dfs(int start, int dst, bool nonstop);
 	// perform a bfs from the provided start node. Returns a vector containing
 	// the search results
 	bool bfs(int start, int dst, bool nonstop );
