@@ -56,7 +56,7 @@ bool GRAPH::empty(vector<bool> set) {
 
 // layovers false -> don't count layovers
 // layovers true  -> do count layovers
-vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
+vector<int> GRAPH::path(int src, int dst, bool layovers) {
 	vector<int> shortest_path; 
 	vector<bool> vertex_set;
 	int predecessors[this->node_count];
@@ -92,7 +92,7 @@ vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
 					int weight;
 					weight = t_diff(s.at(0), s.at(1));
 
-					if (layovers && predecessors[currentV] > 0) { // already have predecessor
+					if (!layovers && predecessors[currentV] > 0) { // already have predecessor
 						// determine layover 
 						int pre = predecessors[currentV];
 						vector<int> schedA = this->data[pre][currentV];
@@ -130,6 +130,10 @@ vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
 		return shortest_path;
 	}
 
+	int t = distances[dst];
+	int h = t / 60;
+	int m = t % 60;
+	cout << "\nTravel time: " << h << "h" << m << "m\n";
 
 	if (predecessors[tmp] > 0) {
 		shortest_path.push_back(dst);
@@ -146,6 +150,13 @@ vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
 	}
 
 	return shortest_path;
+}
+
+int to_m(int t) {
+	int h1 = t / 100;
+	int m1 = t % 100;
+
+	return h1 * 60 + m1;
 }
 
 int GRAPH::t_diff(int a, int b) {
@@ -166,14 +177,7 @@ int GRAPH::t_diff(int a, int b) {
 
 	int minutes = diff_h * 60 + diff_m;
 
-	int result;
-	int h = minutes / 60;
-	int m = minutes % 60;
-
-	result = (h * 100) + m;
-
-	// convert back to hhmm
-	return result;
+	return minutes;
 }
 
 vector<vector<int> > GRAPH::station_schedule(int station_id) {

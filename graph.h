@@ -43,6 +43,8 @@ public:
 	vector<int> path(int, int, bool);
 
     int t_diff (int a, int b);
+
+	int to_sec(sched schedule);
 private:
 	// keep track of the number of nodes in the graph
 	int node_count;
