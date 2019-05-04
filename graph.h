@@ -38,7 +38,7 @@ public:
 
 	// Perform a service_available from the provided start node. Returns a vector containing
 	// the search results
-	bool service_available(int start, int dst, bool nonstop);
+	bool service_available(int start, int dst);
 
 	vector<int> path(int, int, bool);
 

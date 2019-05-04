@@ -158,10 +158,10 @@ void menu_repl(GRAPH* graph, map<int, string> &stations) {
 				check_service_availability(graph, stations, true);
 				break;
 			case '7': // route w shortest riding time
-				find_route(graph, stations, false);
+				find_route(graph, stations, true);
 				break;
 			case '8': // route w shortest total time
-				find_route(graph, stations, true);
+				find_route(graph, stations, false);
 				break;
 			case '9':
 			case 'q':
@@ -315,7 +315,7 @@ void check_service_availability(GRAPH* graph, map<int, string> &stations, bool n
 	if (nonstop) {
 		avail = graph->edge_exists(station_id, station_id2);
 	} else {
-		avail = graph->service_available(station_id, station_id2, nonstop);
+		avail = graph->service_available(station_id, station_id2);
 	}
 
 	if (avail) {

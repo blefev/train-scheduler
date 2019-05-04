@@ -14,7 +14,7 @@ void GRAPH::set_edge(int source, int destination, sched schedule)
 	this->data[source][destination] = schedule;
 }
 
-bool GRAPH::service_available(int start, int dst, bool nonstop)
+bool GRAPH::service_available(int start, int dst)
 {
     set<int> discovered;
 	int predecessors[this->node_count] = {0};
@@ -33,23 +33,11 @@ bool GRAPH::service_available(int start, int dst, bool nonstop)
             discovered.insert(cur);
             for (int i=1; i <= this->node_count; i++) {
                 if (!this->data[cur][i].empty()) {
-					if (nonstop) {
-						int departure = this->data[cur][i].at(0);
-						if (arrival == -1 || departure - arrival == 1 || departure - arrival == 0) {
-							if (i == dst) {
-								return true;
-							}
-
-							// push station id and arrival
-							st.push_back(make_pair(i, this->data[cur][i].at(1)));
-						}
-					} else {
 						if (i == dst) {
 							return true;
 						}
 
 						st.push_back(make_pair(i, -1));
-					}
 				}
 			}
 		}
@@ -138,6 +126,11 @@ vector<int> GRAPH::path(int src, int dst, bool layovers = false) {
 	// following predecessors
 	// may also need to add scheds to this
 	int tmp = dst;
+	if (tmp == 0) {
+		return shortest_path;
+	}
+
+
 	if (predecessors[tmp] > 0) {
 		shortest_path.push_back(dst);
 		while (tmp != src) {
@@ -162,6 +155,7 @@ int GRAPH::t_diff(int a, int b) {
 	int h2 = b / 100;
 	int m2 = b % 100;
 
+
 	if (m1 > m2) {
 		h2--;
 		m2 += 60;
@@ -171,7 +165,15 @@ int GRAPH::t_diff(int a, int b) {
 	int diff_h = h2 - h1;
 
 	int minutes = diff_h * 60 + diff_m;
-	return minutes;
+
+	int result;
+	int h = minutes / 60;
+	int m = minutes % 60;
+
+	result = (h * 100) + m;
+
+	// convert back to hhmm
+	return result;
 }
 
 vector<vector<int> > GRAPH::station_schedule(int station_id) {
